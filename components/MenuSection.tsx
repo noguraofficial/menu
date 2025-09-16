@@ -117,16 +117,20 @@ export default function MenuSection() {
                       
                       {quantity > 0 ? (
                         <div className="flex items-center space-x-2">
-                          <span className="text-sm font-medium text-gray-600">Qty:</span>
-                          <span className="w-8 text-center font-semibold text-black text-sm bg-gray-100 px-2 py-1 rounded">
-                            {quantity}
-                          </span>
-                          <button
-                            onClick={() => handleAddToCart(item)}
-                            className="px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                          >
-                            Edit
-                          </button>
+                          <div className="flex flex-col items-end">
+                            <span className="text-xs text-gray-500 mb-1">In Cart</span>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm font-semibold text-black bg-gray-100 px-2 py-1 rounded">
+                                {quantity}x
+                              </span>
+                              <button
+                                onClick={() => handleAddToCart(item)}
+                                className="px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                              >
+                                Edit
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       ) : (
                         <button

@@ -18,8 +18,29 @@ export default function CartSummary() {
       <div className="max-w-4xl mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <div className="flex-1">
-            <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
-            <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
+                <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
+              </div>
+              {state.items.length > 0 && (
+                <div className="hidden sm:block">
+                  <p className="text-xs text-gray-400 mb-1">Items in cart:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {state.items.slice(0, 3).map((item) => (
+                      <span key={item.id} className="text-xs bg-gray-700 px-2 py-1 rounded">
+                        {item.quantity}x {item.name.split(' ')[0]}
+                      </span>
+                    ))}
+                    {state.items.length > 3 && (
+                      <span className="text-xs bg-gray-700 px-2 py-1 rounded">
+                        +{state.items.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <Link
             href="/checkout"
