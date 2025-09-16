@@ -33,27 +33,27 @@ export default function MenuSection() {
   }
 
   return (
-    <section id="menu" className="py-8 min-h-screen">
+    <section id="menu" className="py-6 min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4">
 
         {/* Order Type Buttons */}
-        <div className="flex justify-end gap-3 mb-6">
+        <div className="flex justify-end gap-2 mb-6">
           <button
             onClick={() => setOrderType('dine-in')}
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
               orderType === 'dine-in'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                ? 'bg-black text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
           >
             Dine In
           </button>
           <button
             onClick={() => setOrderType('take-away')}
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
               orderType === 'take-away'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                ? 'bg-black text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
           >
             Take Away
@@ -61,13 +61,13 @@ export default function MenuSection() {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
               activeCategory === 'all'
-                ? 'bg-black text-white shadow-sm'
-                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                ? 'bg-black text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
           >
             All Items
@@ -76,10 +76,10 @@ export default function MenuSection() {
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 activeCategory === category.id
-                  ? 'bg-black text-white shadow-sm'
-                  : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                  ? 'bg-black text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
               }`}
             >
               {category.name}
@@ -88,56 +88,55 @@ export default function MenuSection() {
         </div>
 
         {/* Menu Items List */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filteredItems.map((item) => {
             const quantity = getItemQuantity(item.id)
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200"
+                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-gray-300 transition-colors duration-200"
               >
                 <div className="flex">
                   {/* Thumbnail Image */}
-                  <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center flex-shrink-0">
-                    <div className="text-center text-gray-400">
-                      <div className="text-3xl">🍜</div>
+                  <div className="w-20 h-20 bg-gray-50 flex items-center justify-center flex-shrink-0 border-r border-gray-200">
+                    <div className="text-center text-gray-500">
+                      <div className="text-2xl">🍜</div>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 p-5">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 flex-1 pr-3">{item.name}</h3>
-                    </div>
-                    
+                  <div className="flex-1 p-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-gray-800">
-                        {formatCurrency(item.price)}
-                      </span>
+                      <div className="flex-1 pr-3">
+                        <h3 className="text-base font-semibold text-black mb-1">{item.name}</h3>
+                        <span className="text-lg font-bold text-black">
+                          {formatCurrency(item.price)}
+                        </span>
+                      </div>
                       
                       {quantity > 0 ? (
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2">
                           <button
                             onClick={() => handleQuantityChange(item.id, quantity - 1)}
-                            className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-200"
+                            className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-300"
                           >
-                            <Minus className="w-4 h-4 text-gray-600" />
+                            <Minus className="w-3 h-3 text-gray-700" />
                           </button>
-                          <span className="w-8 text-center font-semibold text-gray-900">{quantity}</span>
+                          <span className="w-6 text-center font-semibold text-black text-sm">{quantity}</span>
                           <button
                             onClick={() => handleQuantityChange(item.id, quantity + 1)}
-                            className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-200"
+                            className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-300"
                           >
-                            <Plus className="w-4 h-4 text-gray-600" />
+                            <Plus className="w-3 h-3 text-gray-700" />
                           </button>
                         </div>
                       ) : (
                         <button
                           onClick={() => handleAddToCart(item)}
                           disabled={!item.isAvailable}
-                          className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                             item.isAvailable
-                              ? 'bg-black text-white hover:bg-gray-800 shadow-sm'
+                              ? 'bg-black text-white hover:bg-gray-800'
                               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                           }`}
                         >

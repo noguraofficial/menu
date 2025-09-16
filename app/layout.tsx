@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="bg-gray-50 min-h-screen">
+      <body className="bg-white min-h-screen">
         <CartProvider>
           <Header />
           <main className="pb-20">
