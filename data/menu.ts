@@ -3,6 +3,24 @@ import { MenuItem } from '@/context/CartContext'
 export const menuItems: MenuItem[] = [
   // Ramen
   {
+    id: 'tori-paitan',
+    name: 'Tori Paitan',
+    description: 'Ramen dengan kaldu ayam yang kental dan creamy, dilengkapi dengan chashu, nori, dan telur rebus',
+    price: 40000,
+    image: '/images/tori-paitan.jpg',
+    category: 'ramen',
+    isAvailable: true
+  },
+  {
+    id: 'tantan-ramen',
+    name: 'Tantan Ramen',
+    description: 'Ramen pedas dengan kaldu ayam dan bumbu tantan, topping chashu, sayuran, dan biji wijen',
+    price: 45000,
+    image: '/images/tantan-ramen.jpg',
+    category: 'ramen',
+    isAvailable: true
+  },
+  {
     id: 'tonkotsu-ramen',
     name: 'Tonkotsu Ramen',
     description: 'Ramen dengan kaldu tulang babi yang kental dan gurih, dilengkapi dengan chashu, nori, dan telur rebus',
