@@ -19,19 +19,9 @@ export default function MenuSection() {
   return (
     <section id="menu" className="py-8 bg-white">
       <div className="px-4">
-        {/* Section Header - Mobile Optimized */}
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-black mb-3">
-            Menu Pilihan Kami
-          </h2>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            Nikmati berbagai pilihan ramen autentik dan hidangan Jepang lainnya, 
-            dibuat dengan cinta dan bahan-bahan terbaik.
-          </p>
-        </div>
 
         {/* Category Tabs - Mobile Optimized */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 mb-6">
           {menuCategories.map((category) => (
             <button
               key={category.id}
