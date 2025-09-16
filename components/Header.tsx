@@ -16,32 +16,20 @@ export default function Header() {
   return (
     <>
       <header className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
+        <div className="px-4">
+          <div className="flex justify-between items-center h-14">
+            {/* Logo - Mobile Optimized */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
-                <Utensils className="w-6 h-6 text-white" />
+              <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                <Utensils className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Nogura Ramen Bar</h1>
+                <h1 className="text-lg font-bold text-gray-900">Nogura Ramen Bar</h1>
                 <p className="text-xs text-gray-500">Authentic Japanese Ramen</p>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/" className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors">
-                <Home className="w-4 h-4" />
-                <span>Beranda</span>
-              </Link>
-              <Link href="#menu" className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 transition-colors">
-                <Utensils className="w-4 h-4" />
-                <span>Menu</span>
-              </Link>
-            </nav>
-
-            {/* Cart Button */}
+            {/* Cart Button - Mobile Optimized */}
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 text-gray-700 hover:text-gray-900 transition-colors"
@@ -53,39 +41,7 @@ export default function Header() {
                 </span>
               )}
             </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:text-gray-900 transition-colors"
-            >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t border-gray-200">
-              <nav className="flex flex-col space-y-4">
-                <Link 
-                  href="/" 
-                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Home className="w-4 h-4" />
-                  <span>Beranda</span>
-                </Link>
-                <Link 
-                  href="#menu" 
-                  className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Utensils className="w-4 h-4" />
-                  <span>Menu</span>
-                </Link>
-              </nav>
-            </div>
-          )}
         </div>
       </header>
 

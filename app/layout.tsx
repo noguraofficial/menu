@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className="bg-gray-50 min-h-screen">
         <CartProvider>
           <Header />
-          <main className="pb-20">
+          <main className="pb-16">
             {children}
           </main>
         </CartProvider>
