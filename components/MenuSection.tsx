@@ -17,14 +17,17 @@ export default function MenuSection() {
   }
 
   return (
-    <section id="menu" className="py-16 bg-white">
+    <section id="menu" className="py-8 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {/* Main Header */}
+        <div className="text-center mb-12 pt-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Nogura Ramen Bar
+          </h1>
+          <p className="text-xl text-gray-600 mb-6">
             Menu Pilihan Kami
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          </p>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
             Nikmati berbagai pilihan ramen autentik dan hidangan Jepang lainnya, 
             dibuat dengan cinta dan bahan-bahan terbaik.
           </p>

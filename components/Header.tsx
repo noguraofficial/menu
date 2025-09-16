@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, Menu, X, Home, Utensils, Info } from 'lucide-react'
+import { ShoppingCart, Menu, X, Home, Utensils } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import CartDrawer from './CartDrawer'
 
@@ -38,10 +38,6 @@ export default function Header() {
               <Link href="#menu" className="flex items-center space-x-1 text-gray-700 hover:text-primary-600 transition-colors">
                 <Utensils className="w-4 h-4" />
                 <span>Menu</span>
-              </Link>
-              <Link href="#about" className="flex items-center space-x-1 text-gray-700 hover:text-primary-600 transition-colors">
-                <Info className="w-4 h-4" />
-                <span>Tentang</span>
               </Link>
             </nav>
 
@@ -86,14 +82,6 @@ export default function Header() {
                 >
                   <Utensils className="w-4 h-4" />
                   <span>Menu</span>
-                </Link>
-                <Link 
-                  href="#about" 
-                  className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Info className="w-4 h-4" />
-                  <span>Tentang</span>
                 </Link>
               </nav>
             </div>
