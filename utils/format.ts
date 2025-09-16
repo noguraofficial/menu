@@ -1,10 +1,7 @@
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount)
+  // Use a more consistent formatting approach
+  const formatted = amount.toLocaleString('id-ID')
+  return `Rp ${formatted}`
 }
 
 export function formatPhoneNumber(phone: string): string {
