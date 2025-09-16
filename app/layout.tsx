@@ -9,7 +9,11 @@ export const metadata: Metadata = {
   description: 'Pesan menu favorit Anda dari Nogura Ramen Bar dengan mudah. Tersedia untuk dine-in dan takeaway.',
   keywords: 'ramen, japanese food, nogura, menu, pesan online, dine in, takeaway',
   authors: [{ name: 'Nogura Ramen Bar' }],
-  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -19,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="bg-white min-h-screen">
+      <body className="bg-gray-50 min-h-screen">
         <CartProvider>
           <Header />
           <main className="pb-20">
