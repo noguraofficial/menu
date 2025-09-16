@@ -16,20 +16,20 @@ export default function Header() {
   return (
     <>
       <header className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="px-4">
-          <div className="flex justify-between items-center h-14">
-            {/* Logo - Mobile Optimized */}
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex justify-between items-center h-14 md:h-16">
+            {/* Logo - Responsive */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                <Utensils className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gray-800 rounded-full flex items-center justify-center">
+                <Utensils className="w-4 h-4 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">Nogura Ramen Bar</h1>
-                <p className="text-xs text-gray-500">Authentic Japanese Ramen</p>
+                <h1 className="text-lg md:text-xl font-bold text-gray-900">Nogura Ramen Bar</h1>
+                <p className="text-xs md:text-sm text-gray-500">Authentic Japanese Ramen</p>
               </div>
             </Link>
 
-            {/* Cart Button - Mobile Optimized */}
+            {/* Cart Button - Responsive */}
             <button
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 text-gray-700 hover:text-gray-900 transition-colors"
