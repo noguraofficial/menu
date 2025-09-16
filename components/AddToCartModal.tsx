@@ -39,10 +39,26 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
 
   const handleUpdateCart = () => {
     if (quantity > 0) {
-      dispatch({ 
-        type: 'UPDATE_ITEM_QUANTITY', 
-        payload: { id: item.id, quantity } 
-      })
+      if (currentQuantity > 0) {
+        // Update existing item
+        dispatch({ 
+          type: 'UPDATE_ITEM_QUANTITY', 
+          payload: { id: item.id, quantity } 
+        })
+      } else {
+        // Add new item
+        dispatch({ 
+          type: 'ADD_ITEM', 
+          payload: item 
+        })
+        // Then update quantity if needed
+        if (quantity > 1) {
+          dispatch({ 
+            type: 'UPDATE_ITEM_QUANTITY', 
+            payload: { id: item.id, quantity } 
+          })
+        }
+      }
     }
     onClose()
   }

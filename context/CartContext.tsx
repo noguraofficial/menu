@@ -81,16 +81,24 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
     
     case 'UPDATE_ITEM_QUANTITY': {
-      const updatedItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-          : item
-      ).filter(item => item.quantity > 0)
+      const existingItem = state.items.find(item => item.id === action.payload.id)
       
-      return {
-        ...state,
-        items: updatedItems,
-        total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+      if (existingItem) {
+        // Update existing item
+        const updatedItems = state.items.map(item =>
+          item.id === action.payload.id
+            ? { ...item, quantity: Math.max(0, action.payload.quantity) }
+            : item
+        ).filter(item => item.quantity > 0)
+        
+        return {
+          ...state,
+          items: updatedItems,
+          total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        }
+      } else {
+        // Item not found in cart, this should not happen with UPDATE_ITEM_QUANTITY
+        return state
       }
     }
     
