@@ -19,12 +19,12 @@ export default function CartSummary() {
       <div className="max-w-4xl mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <div className="flex-1">
-            {totalItems > 0 ? (
-              <div className="flex items-center space-x-4">
-                <div>
-                  <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
-                  <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
-                </div>
+            <div className="flex items-center space-x-4">
+              <div>
+                <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
+                <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
+              </div>
+              {totalItems > 0 && (
                 <div className="hidden sm:block">
                   <p className="text-xs text-gray-400 mb-1">Items in cart:</p>
                   <div className="flex flex-wrap gap-1">
@@ -40,13 +40,8 @@ export default function CartSummary() {
                     )}
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-gray-300 mb-1">Cart is empty</p>
-                <p className="text-lg text-gray-400">Add items to get started</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           {totalItems > 0 && (
             <Link

@@ -29,8 +29,8 @@ interface CartState {
 type CartAction =
   | { type: 'ADD_ITEM'; payload: MenuItem }
   | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'UPDATE_NOTES'; payload: { id: string; notes: string } }
+  | { type: 'UPDATE_ITEM_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'UPDATE_ITEM_NOTES'; payload: { id: string; notes: string } }
   | { type: 'SET_ORDER_TYPE'; payload: 'dine-in' | 'takeaway' }
   | { type: 'SET_CUSTOMER_INFO'; payload: { name: string; phone: string; tableNumber?: string } }
   | { type: 'CLEAR_CART' }
@@ -80,7 +80,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
     }
     
-    case 'UPDATE_QUANTITY': {
+    case 'UPDATE_ITEM_QUANTITY': {
       const updatedItems = state.items.map(item =>
         item.id === action.payload.id
           ? { ...item, quantity: Math.max(0, action.payload.quantity) }
@@ -94,7 +94,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
     }
     
-    case 'UPDATE_NOTES': {
+    case 'UPDATE_ITEM_NOTES': {
       const updatedItems = state.items.map(item =>
         item.id === action.payload.id
           ? { ...item, notes: action.payload.notes }
