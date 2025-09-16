@@ -50,11 +50,10 @@ export default function CheckoutPage() {
     setIsSubmitting(true)
     
     // Simulate order submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // Clear cart and redirect to confirmation
-    dispatch({ type: 'CLEAR_CART' })
-    router.push('/confirmation')
+    // Redirect to reservation page instead of clearing cart
+    router.push('/reservation')
   }
 
   if (state.items.length === 0) {
