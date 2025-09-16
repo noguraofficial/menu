@@ -133,7 +133,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <Link
                 href="/checkout"
                 onClick={onClose}
-                className="w-full bg-gray-800 text-white py-3 px-4 rounded-lg text-sm md:text-base font-medium hover:bg-gray-700 transition-colors text-center block"
+                className="w-full bg-gray-200 text-gray-900 py-3 px-4 rounded-lg text-sm md:text-base font-medium hover:bg-gray-300 border border-gray-300 transition-colors text-center block"
               >
                 Lanjut ke Checkout
               </Link>

@@ -28,8 +28,8 @@ export default function MenuSection() {
               onClick={() => setActiveCategory(category.id)}
               className={`flex items-center space-x-1 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 activeCategory === category.id
-                  ? 'bg-gray-800 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gray-100 text-gray-900 border-2 border-gray-300'
+                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
               }`}
             >
               <span className="text-lg">{category.icon}</span>
@@ -77,8 +77,8 @@ export default function MenuSection() {
                       disabled={!item.isAvailable}
                       className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-colors ${
                         item.isAvailable
-                          ? 'bg-gray-800 text-white hover:bg-gray-700'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'bg-gray-200 text-gray-900 hover:bg-gray-300 border border-gray-300'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
                       }`}
                     >
                       <Plus className="w-3 h-3" />
