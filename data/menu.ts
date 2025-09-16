@@ -9,7 +9,9 @@ export const menuItems: MenuItem[] = [
     price: 40000,
     image: '/images/tori-paitan.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'tantan-ramen',
@@ -18,7 +20,9 @@ export const menuItems: MenuItem[] = [
     price: 45000,
     image: '/images/tantan-ramen.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'tonkotsu-ramen',
@@ -27,7 +31,9 @@ export const menuItems: MenuItem[] = [
     price: 45000,
     image: '/images/tonkotsu-ramen.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: false
   },
   {
     id: 'shoyu-ramen',
@@ -36,7 +42,9 @@ export const menuItems: MenuItem[] = [
     price: 42000,
     image: '/images/shoyu-ramen.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'miso-ramen',
@@ -45,7 +53,9 @@ export const menuItems: MenuItem[] = [
     price: 43000,
     image: '/images/miso-ramen.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'spicy-ramen',
@@ -54,7 +64,9 @@ export const menuItems: MenuItem[] = [
     price: 47000,
     image: '/images/spicy-ramen.jpg',
     category: 'ramen',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: false
   },
 
   // Appetizers
@@ -65,7 +77,9 @@ export const menuItems: MenuItem[] = [
     price: 25000,
     image: '/images/gyoza.jpg',
     category: 'appetizer',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'takoyaki',
@@ -74,7 +88,9 @@ export const menuItems: MenuItem[] = [
     price: 28000,
     image: '/images/takoyaki.jpg',
     category: 'appetizer',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'edamame',
@@ -83,7 +99,9 @@ export const menuItems: MenuItem[] = [
     price: 15000,
     image: '/images/edamame.jpg',
     category: 'appetizer',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'chicken-karaage',
@@ -92,7 +110,9 @@ export const menuItems: MenuItem[] = [
     price: 30000,
     image: '/images/chicken-karaage.jpg',
     category: 'appetizer',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
 
   // Rice Bowls
@@ -103,7 +123,9 @@ export const menuItems: MenuItem[] = [
     price: 35000,
     image: '/images/chashu-don.jpg',
     category: 'rice',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'teriyaki-chicken-don',
@@ -112,7 +134,9 @@ export const menuItems: MenuItem[] = [
     price: 32000,
     image: '/images/teriyaki-chicken-don.jpg',
     category: 'rice',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'katsu-don',
@@ -121,7 +145,9 @@ export const menuItems: MenuItem[] = [
     price: 38000,
     image: '/images/katsu-don.jpg',
     category: 'rice',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
 
   // Drinks
@@ -132,7 +158,9 @@ export const menuItems: MenuItem[] = [
     price: 8000,
     image: '/images/green-tea.jpg',
     category: 'drink',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'ramune',
@@ -141,7 +169,9 @@ export const menuItems: MenuItem[] = [
     price: 15000,
     image: '/images/ramune.jpg',
     category: 'drink',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'calpico',
@@ -150,7 +180,9 @@ export const menuItems: MenuItem[] = [
     price: 12000,
     image: '/images/calpico.jpg',
     category: 'drink',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: true
   },
   {
     id: 'japanese-beer',
@@ -159,7 +191,9 @@ export const menuItems: MenuItem[] = [
     price: 25000,
     image: '/images/japanese-beer.jpg',
     category: 'drink',
-    isAvailable: true
+    isAvailable: true,
+    dineInAvailable: true,
+    takeawayAvailable: false
   }
 ]
 

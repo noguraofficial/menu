@@ -10,6 +10,8 @@ export interface MenuItem {
   image: string
   category: string
   isAvailable: boolean
+  dineInAvailable?: boolean
+  takeawayAvailable?: boolean
 }
 
 export interface CartItem extends MenuItem {
