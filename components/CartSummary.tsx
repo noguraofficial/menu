@@ -9,21 +9,22 @@ export default function CartSummary() {
 
   const totalItems = state.items.reduce((total, item) => total + item.quantity, 0)
 
-  if (totalItems === 0) {
-    return null
-  }
+  // Always show cart summary, even when empty
+  // if (totalItems === 0) {
+  //   return null
+  // }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black text-white z-40 border-t border-gray-700">
       <div className="max-w-4xl mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <div className="flex-1">
-            <div className="flex items-center space-x-4">
-              <div>
-                <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
-                <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
-              </div>
-              {state.items.length > 0 && (
+            {totalItems > 0 ? (
+              <div className="flex items-center space-x-4">
+                <div>
+                  <p className="text-sm text-gray-300 mb-1">Total ({totalItems} items)</p>
+                  <p className="text-xl font-bold text-white">{formatCurrency(state.total)}</p>
+                </div>
                 <div className="hidden sm:block">
                   <p className="text-xs text-gray-400 mb-1">Items in cart:</p>
                   <div className="flex flex-wrap gap-1">
@@ -39,15 +40,22 @@ export default function CartSummary() {
                     )}
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div>
+                <p className="text-sm text-gray-300 mb-1">Cart is empty</p>
+                <p className="text-lg text-gray-400">Add items to get started</p>
+              </div>
+            )}
           </div>
-          <Link
-            href="/checkout"
-            className="bg-white text-black px-6 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition-all duration-200 ml-4"
-          >
-            View Cart
-          </Link>
+          {totalItems > 0 && (
+            <Link
+              href="/checkout"
+              className="bg-white text-black px-6 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition-all duration-200 ml-4"
+            >
+              View Cart
+            </Link>
+          )}
         </div>
       </div>
     </div>
