@@ -1,35 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Minus, Star } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import { menuItems, menuCategories } from '@/data/menu'
 import { formatCurrency } from '@/utils/format'
+import AddToCartModal from './AddToCartModal'
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [orderType, setOrderType] = useState('dine-in')
-  const { state, dispatch } = useCart()
+  const [selectedItem, setSelectedItem] = useState<typeof menuItems[0] | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { state } = useCart()
 
   const filteredItems = activeCategory === 'all' 
     ? menuItems 
     : menuItems.filter(item => item.category === activeCategory)
 
   const handleAddToCart = (item: typeof menuItems[0]) => {
-    dispatch({ type: 'ADD_ITEM', payload: item })
-  }
-
-  const handleQuantityChange = (id: string, quantity: number) => {
-    if (quantity < 1) {
-      dispatch({ type: 'REMOVE_ITEM', payload: id })
-    } else {
-      dispatch({ type: 'UPDATE_ITEM_QUANTITY', payload: { id, quantity } })
-    }
+    setSelectedItem(item)
+    setIsModalOpen(true)
   }
 
   const getItemQuantity = (id: string) => {
     const item = state.items.find(item => item.id === id)
     return item ? item.quantity : 0
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setSelectedItem(null)
   }
 
   return (
@@ -116,18 +117,15 @@ export default function MenuSection() {
                       
                       {quantity > 0 ? (
                         <div className="flex items-center space-x-2">
+                          <span className="text-sm font-medium text-gray-600">Qty:</span>
+                          <span className="w-8 text-center font-semibold text-black text-sm bg-gray-100 px-2 py-1 rounded">
+                            {quantity}
+                          </span>
                           <button
-                            onClick={() => handleQuantityChange(item.id, quantity - 1)}
-                            className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-300"
+                            onClick={() => handleAddToCart(item)}
+                            className="px-3 py-1 rounded text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
                           >
-                            <Minus className="w-3 h-3 text-gray-700" />
-                          </button>
-                          <span className="w-6 text-center font-semibold text-black text-sm">{quantity}</span>
-                          <button
-                            onClick={() => handleQuantityChange(item.id, quantity + 1)}
-                            className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors border border-gray-300"
-                          >
-                            <Plus className="w-3 h-3 text-gray-700" />
+                            Edit
                           </button>
                         </div>
                       ) : (
@@ -164,6 +162,13 @@ export default function MenuSection() {
           </div>
         )}
       </div>
+
+      {/* Add to Cart Modal */}
+      <AddToCartModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        item={selectedItem}
+      />
     </section>
   )
 }
