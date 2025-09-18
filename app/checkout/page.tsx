@@ -21,77 +21,36 @@ export default function CheckoutPage() {
   }
 
   const generateWhatsAppMessage = () => {
-    let message = `🍜 *PESANAN NOGURA RAMEN BAR* 🍜\n\n`
-    message += `📋 *Detail Pesanan:*\n`
-    message += `👤 Atas Nama: ${customerName}\n`
-    message += `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n\n`
+    let message = `Halo Nogura, saya pesan ini ya :\n\n`
     
     // Group items by order type
     const dineInItems = state.items.filter(item => item.dineInAvailable && !item.takeawayAvailable)
     const takeawayItems = state.items.filter(item => item.takeawayAvailable && !item.dineInAvailable)
     const bothItems = state.items.filter(item => item.dineInAvailable && item.takeawayAvailable)
     
-    if (dineInItems.length > 0) {
-      message += `🍽️ *MENU DINE IN:*\n`
-      dineInItems.forEach((item, index) => {
+    if (dineInItems.length > 0 || bothItems.length > 0) {
+      message += `Dine in :\n`
+      const allDineInItems = [...dineInItems, ...bothItems]
+      allDineInItems.forEach((item) => {
         const itemTotal = (item.price + (item.packagingOption && item.useRestaurantPackaging ? 8000 : 0)) * item.quantity
-        message += `${index + 1}. ${item.name}\n`
-        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
-        message += `   🔢 Jumlah: ${item.quantity}x\n`
-        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
-        if (item.notes) {
-          message += `   📝 Catatan: ${item.notes}\n`
-        }
-        message += `\n`
+        message += `• ${item.name} x${item.quantity} - ${formatCurrency(itemTotal)}\n`
       })
+    } else {
+      message += `Dine in :\n-`
     }
     
+    message += `\nTake away :\n`
     if (takeawayItems.length > 0) {
-      message += `🥡 *MENU TAKE AWAY:*\n`
-      takeawayItems.forEach((item, index) => {
+      takeawayItems.forEach((item) => {
         const packagingFee = item.packagingOption && item.useRestaurantPackaging ? 8000 : 0
         const itemTotal = (item.price + packagingFee) * item.quantity
-        message += `${index + 1}. ${item.name}\n`
-        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
-        if (packagingFee > 0) {
-          message += `   📦 Kemasan: ${formatCurrency(packagingFee)}\n`
-        } else {
-          message += `   📦 Kemasan: Bawa Sendiri\n`
-        }
-        message += `   🔢 Jumlah: ${item.quantity}x\n`
-        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
-        if (item.notes) {
-          message += `   📝 Catatan: ${item.notes}\n`
-        }
-        message += `\n`
+        message += `• ${item.name} x${item.quantity} - ${formatCurrency(itemTotal)}\n`
       })
+    } else {
+      message += `-`
     }
     
-    if (bothItems.length > 0) {
-      message += `🍽️🥡 *MENU FLEKSIBEL (Dine In/Take Away):*\n`
-      bothItems.forEach((item, index) => {
-        const packagingFee = item.packagingOption && item.useRestaurantPackaging ? 8000 : 0
-        const itemTotal = (item.price + packagingFee) * item.quantity
-        message += `${index + 1}. ${item.name}\n`
-        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
-        if (packagingFee > 0) {
-          message += `   📦 Kemasan: ${formatCurrency(packagingFee)}\n`
-        } else if (item.takeawayAvailable) {
-          message += `   📦 Kemasan: Bawa Sendiri\n`
-        }
-        message += `   🔢 Jumlah: ${item.quantity}x\n`
-        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
-        if (item.notes) {
-          message += `   📝 Catatan: ${item.notes}\n`
-        }
-        message += `\n`
-      })
-    }
-    
-    message += `💰 *TOTAL PEMBAYARAN: ${formatCurrency(state.total)}*\n\n`
-    message += `📞 *Konfirmasi pesanan ini melalui WhatsApp atau datang langsung ke restoran.*\n`
-    message += `📍 *Lokasi: Nogura Ramen Bar*\n`
-    message += `⏰ *Jam Operasional: 11:00 - 22:00 WIB*`
+    message += `\nTotal: ${formatCurrency(state.total)}`
     
     return message
   }

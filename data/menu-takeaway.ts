@@ -43,7 +43,7 @@ export const takeawayMenuItems: MenuItem[] = [
   {
     id: 'takeaway-gyoza',
     name: 'Gyoza (6 pcs) - Take Away',
-    description: 'Dumpling isi daging babi dan sayuran, dikemas untuk take away',
+    description: 'Dumpling isi daging ayam dan sayuran, dikemas untuk take away',
     price: 25000,
     image: '/images/gyoza.jpg',
     category: 'appetizer',
@@ -77,8 +77,8 @@ export const takeawayMenuItems: MenuItem[] = [
   // Rice Bowls - Take Away Only
   {
     id: 'takeaway-chashu-don',
-    name: 'Chashu Don - Take Away',
-    description: 'Nasi dengan potongan chashu, telur, dan sayuran segar, dikemas untuk take away',
+    name: 'Chashu Ayam Don - Take Away',
+    description: 'Nasi dengan potongan chashu ayam, telur, dan sayuran segar, dikemas untuk take away',
     price: 35000,
     image: '/images/chashu-don.jpg',
     category: 'rice',
@@ -100,9 +100,9 @@ export const takeawayMenuItems: MenuItem[] = [
     packagingOption: true
   },
   {
-    id: 'takeaway-katsu-don',
-    name: 'Katsu Don - Take Away',
-    description: 'Nasi dengan daging katsu, telur, dan saus katsu, dikemas untuk take away',
+    id: 'takeaway-chicken-katsu-don',
+    name: 'Chicken Katsu Don - Take Away',
+    description: 'Nasi dengan ayam katsu, telur, dan saus katsu, dikemas untuk take away',
     price: 38000,
     image: '/images/katsu-don.jpg',
     category: 'rice',
@@ -141,6 +141,17 @@ export const takeawayMenuItems: MenuItem[] = [
     description: 'Minuman susu fermentasi dengan rasa buah yang unik, dikemas untuk take away',
     price: 12000,
     image: '/images/calpico.jpg',
+    category: 'drink',
+    isAvailable: true,
+    dineInAvailable: false,
+    takeawayAvailable: true
+  },
+  {
+    id: 'takeaway-es-kopi-susu',
+    name: 'Es Kopi Susu Platera - Take Away',
+    description: 'Kopi susu dingin dengan tekstur yang creamy dan nikmat, dikemas untuk take away',
+    price: 20000,
+    image: '/images/es-kopi-susu.jpg',
     category: 'drink',
     isAvailable: true,
     dineInAvailable: false,
