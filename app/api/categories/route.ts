@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/database'
 
 export async function GET() {
   try {
+    // Check if database is available
+    const { prisma } = await import('@/lib/database')
+    
     const categories = await prisma.category.findMany({
       where: {
         isActive: true,
@@ -14,16 +16,25 @@ export async function GET() {
 
     return NextResponse.json(categories)
   } catch (error) {
-    console.error('Error fetching categories:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    )
+    console.error('Database not available, using fallback data:', error)
+    
+    // Fallback to static data
+    const { dineInCategories } = await import('@/data/menu-dine-in')
+    
+    const fallbackCategories = dineInCategories.map(cat => ({
+      ...cat,
+      isActive: true,
+      description: '',
+      icon: ''
+    }))
+
+    return NextResponse.json(fallbackCategories)
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const { prisma } = await import('@/lib/database')
     const body = await request.json()
     const { name, description, icon, isActive } = body
 
@@ -40,8 +51,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating category:', error)
     return NextResponse.json(
-      { error: 'Failed to create category' },
-      { status: 500 }
+      { error: 'Database not available for creating categories' },
+      { status: 503 }
     )
   }
 }

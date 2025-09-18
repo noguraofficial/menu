@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/database'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const { prisma } = await import('@/lib/database')
+    
     const menuItem = await prisma.menuItem.findUnique({
       where: { id: params.id },
       include: {
@@ -22,11 +23,36 @@ export async function GET(
 
     return NextResponse.json(menuItem)
   } catch (error) {
-    console.error('Error fetching menu item:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch menu item' },
-      { status: 500 }
-    )
+    console.error('Database not available, using fallback data:', error)
+    
+    // Fallback to static data
+    const { dineInMenuItems, dineInCategories } = await import('@/data/menu-dine-in')
+    const { takeawayMenuItems, takeawayCategories } = await import('@/data/menu-takeaway')
+    
+    const allItems = [...dineInMenuItems, ...takeawayMenuItems]
+    const allCategories = [...dineInCategories, ...takeawayCategories]
+    
+    const menuItem = allItems.find(item => item.id === params.id)
+    
+    if (!menuItem) {
+      return NextResponse.json(
+        { error: 'Menu item not found' },
+        { status: 404 }
+      )
+    }
+
+    const formattedItem = {
+      ...menuItem,
+      categoryId: menuItem.category,
+      category: {
+        id: menuItem.category,
+        name: allCategories.find(cat => cat.id === menuItem.category)?.name || menuItem.category,
+        description: '',
+        icon: ''
+      }
+    }
+
+    return NextResponse.json(formattedItem)
   }
 }
 
@@ -35,6 +61,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const { prisma } = await import('@/lib/database')
     const body = await request.json()
     const {
       name,
@@ -70,8 +97,8 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating menu item:', error)
     return NextResponse.json(
-      { error: 'Failed to update menu item' },
-      { status: 500 }
+      { error: 'Database not available for updating menu items' },
+      { status: 503 }
     )
   }
 }
@@ -81,6 +108,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    const { prisma } = await import('@/lib/database')
+    
     await prisma.menuItem.delete({
       where: { id: params.id },
     })
@@ -89,8 +118,8 @@ export async function DELETE(
   } catch (error) {
     console.error('Error deleting menu item:', error)
     return NextResponse.json(
-      { error: 'Failed to delete menu item' },
-      { status: 500 }
+      { error: 'Database not available for deleting menu items' },
+      { status: 503 }
     )
   }
 }

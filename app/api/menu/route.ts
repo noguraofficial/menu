@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/database'
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,6 +6,9 @@ export async function GET(request: NextRequest) {
     const orderType = searchParams.get('orderType')
     const categoryId = searchParams.get('categoryId')
 
+    // Check if database is available
+    const { prisma } = await import('@/lib/database')
+    
     const where: any = {
       isAvailable: true,
     }
@@ -33,16 +35,43 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(menuItems)
   } catch (error) {
-    console.error('Error fetching menu items:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch menu items' },
-      { status: 500 }
-    )
+    console.error('Database not available, using fallback data:', error)
+    
+    // Fallback to static data
+    const { dineInMenuItems, dineInCategories } = await import('@/data/menu-dine-in')
+    const { takeawayMenuItems, takeawayCategories } = await import('@/data/menu-takeaway')
+    
+    const orderType = new URL(request.url).searchParams.get('orderType')
+    const categoryId = new URL(request.url).searchParams.get('categoryId')
+    
+    const currentMenuItems = orderType === 'takeaway' ? takeawayMenuItems : dineInMenuItems
+    const currentCategories = orderType === 'takeaway' ? takeawayCategories : dineInCategories
+
+    // Filter by category if specified
+    let filteredItems = currentMenuItems
+    if (categoryId && categoryId !== 'all') {
+      filteredItems = currentMenuItems.filter(item => item.category === categoryId)
+    }
+
+    // Convert to database format
+    const formattedItems = filteredItems.map(item => ({
+      ...item,
+      categoryId: item.category,
+      category: {
+        id: item.category,
+        name: currentCategories.find(cat => cat.id === item.category)?.name || item.category,
+        description: '',
+        icon: ''
+      }
+    }))
+
+    return NextResponse.json(formattedItems)
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const { prisma } = await import('@/lib/database')
     const body = await request.json()
     const {
       name,
@@ -77,8 +106,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating menu item:', error)
     return NextResponse.json(
-      { error: 'Failed to create menu item' },
-      { status: 500 }
+      { error: 'Database not available for creating menu items' },
+      { status: 503 }
     )
   }
 }
