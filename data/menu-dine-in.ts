@@ -149,7 +149,7 @@ export const dineInMenuItems: MenuItem[] = [
     category: 'drink',
     isAvailable: true,
     dineInAvailable: true,
-    takeawayAvailable: false
+    takeawayAvailable: true
   },
   {
     id: 'dine-in-ramune',
@@ -160,7 +160,7 @@ export const dineInMenuItems: MenuItem[] = [
     category: 'drink',
     isAvailable: true,
     dineInAvailable: true,
-    takeawayAvailable: false
+    takeawayAvailable: true
   },
   {
     id: 'dine-in-calpico',
@@ -171,7 +171,7 @@ export const dineInMenuItems: MenuItem[] = [
     category: 'drink',
     isAvailable: true,
     dineInAvailable: true,
-    takeawayAvailable: false
+    takeawayAvailable: true
   },
   {
     id: 'dine-in-japanese-beer',

@@ -21,26 +21,72 @@ export default function CheckoutPage() {
   }
 
   const generateWhatsAppMessage = () => {
-    const orderType = state.orderType || 'dine-in'
-    const orderTypeText = orderType === 'dine-in' ? 'Dine In' : 'Take Away'
-    
     let message = `🍜 *PESANAN NOGURA RAMEN BAR* 🍜\n\n`
     message += `📋 *Detail Pesanan:*\n`
     message += `👤 Atas Nama: ${customerName}\n`
-    message += `📅 Tipe Pesanan: ${orderTypeText}\n`
     message += `🕐 Waktu: ${new Date().toLocaleString('id-ID')}\n\n`
     
-    message += `📝 *Daftar Menu:*\n`
-    state.items.forEach((item, index) => {
-      message += `${index + 1}. ${item.name}\n`
-      message += `   💰 Harga: ${formatCurrency(item.price)}\n`
-      message += `   🔢 Jumlah: ${item.quantity}x\n`
-      message += `   💵 Subtotal: ${formatCurrency(item.price * item.quantity)}\n`
-      if (item.notes) {
-        message += `   📝 Catatan: ${item.notes}\n`
-      }
-      message += `\n`
-    })
+    // Group items by order type
+    const dineInItems = state.items.filter(item => item.dineInAvailable && !item.takeawayAvailable)
+    const takeawayItems = state.items.filter(item => item.takeawayAvailable && !item.dineInAvailable)
+    const bothItems = state.items.filter(item => item.dineInAvailable && item.takeawayAvailable)
+    
+    if (dineInItems.length > 0) {
+      message += `🍽️ *MENU DINE IN:*\n`
+      dineInItems.forEach((item, index) => {
+        const itemTotal = (item.price + (item.packagingOption && item.useRestaurantPackaging ? 8000 : 0)) * item.quantity
+        message += `${index + 1}. ${item.name}\n`
+        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
+        message += `   🔢 Jumlah: ${item.quantity}x\n`
+        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
+        if (item.notes) {
+          message += `   📝 Catatan: ${item.notes}\n`
+        }
+        message += `\n`
+      })
+    }
+    
+    if (takeawayItems.length > 0) {
+      message += `🥡 *MENU TAKE AWAY:*\n`
+      takeawayItems.forEach((item, index) => {
+        const packagingFee = item.packagingOption && item.useRestaurantPackaging ? 8000 : 0
+        const itemTotal = (item.price + packagingFee) * item.quantity
+        message += `${index + 1}. ${item.name}\n`
+        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
+        if (packagingFee > 0) {
+          message += `   📦 Kemasan: ${formatCurrency(packagingFee)}\n`
+        } else {
+          message += `   📦 Kemasan: Bawa Sendiri\n`
+        }
+        message += `   🔢 Jumlah: ${item.quantity}x\n`
+        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
+        if (item.notes) {
+          message += `   📝 Catatan: ${item.notes}\n`
+        }
+        message += `\n`
+      })
+    }
+    
+    if (bothItems.length > 0) {
+      message += `🍽️🥡 *MENU FLEKSIBEL (Dine In/Take Away):*\n`
+      bothItems.forEach((item, index) => {
+        const packagingFee = item.packagingOption && item.useRestaurantPackaging ? 8000 : 0
+        const itemTotal = (item.price + packagingFee) * item.quantity
+        message += `${index + 1}. ${item.name}\n`
+        message += `   💰 Harga: ${formatCurrency(item.price)}\n`
+        if (packagingFee > 0) {
+          message += `   📦 Kemasan: ${formatCurrency(packagingFee)}\n`
+        } else if (item.takeawayAvailable) {
+          message += `   📦 Kemasan: Bawa Sendiri\n`
+        }
+        message += `   🔢 Jumlah: ${item.quantity}x\n`
+        message += `   💵 Subtotal: ${formatCurrency(itemTotal)}\n`
+        if (item.notes) {
+          message += `   📝 Catatan: ${item.notes}\n`
+        }
+        message += `\n`
+      })
+    }
     
     message += `💰 *TOTAL PEMBAYARAN: ${formatCurrency(state.total)}*\n\n`
     message += `📞 *Konfirmasi pesanan ini melalui WhatsApp atau datang langsung ke restoran.*\n`
@@ -119,31 +165,6 @@ export default function CheckoutPage() {
             </button>
           </div>
 
-          {/* Order Type Selection */}
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex gap-2">
-              <button
-                onClick={() => dispatch({ type: 'SET_ORDER_TYPE', payload: 'dine-in' })}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  state.orderType === 'dine-in'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Dine In
-              </button>
-              <button
-                onClick={() => dispatch({ type: 'SET_ORDER_TYPE', payload: 'takeaway' })}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  state.orderType === 'takeaway'
-                    ? 'bg-orange-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Take Away
-              </button>
-            </div>
-          </div>
 
           {/* Order Items */}
           <div className="p-6 space-y-4">
@@ -162,15 +183,27 @@ export default function CheckoutPage() {
                   {/* Order Type Tags */}
                   <div className="flex gap-2 mt-2">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      state.orderType === 'dine-in' 
+                      item.dineInAvailable && !item.takeawayAvailable
                         ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-orange-100 text-orange-700'
+                        : item.takeawayAvailable && !item.dineInAvailable
+                        ? 'bg-orange-100 text-orange-700'
+                        : 'bg-gray-100 text-gray-700'
                     }`}>
-                      {state.orderType === 'dine-in' ? 'Dine In' : 'Take Away'}
+                      {item.dineInAvailable && !item.takeawayAvailable 
+                        ? 'Dine In Only' 
+                        : item.takeawayAvailable && !item.dineInAvailable
+                        ? 'Take Away Only'
+                        : 'Both Available'
+                      }
                     </span>
-                    {state.orderType === 'takeaway' && (
+                    {item.takeawayAvailable && item.useRestaurantPackaging && (
                       <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                        Kemasan (+Rp 8.000)
+                        Kemasan Resto (+Rp 8.000)
+                      </span>
+                    )}
+                    {item.takeawayAvailable && !item.useRestaurantPackaging && (
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                        Bawa Sendiri
                       </span>
                     )}
                   </div>

@@ -19,11 +19,16 @@ export default function MenuSection() {
   const currentMenuItems = orderType === 'dine-in' ? dineInMenuItems : takeawayMenuItems
   const currentCategories = orderType === 'dine-in' ? dineInCategories : takeawayCategories
 
-  const filteredItems = activeCategory === 'all'
-    ? currentMenuItems
-    : currentMenuItems.filter(item => item.category === activeCategory)
+  // Filter items based on order type availability
+  const availableItems = currentMenuItems.filter(item => 
+    orderType === 'dine-in' ? item.dineInAvailable : item.takeawayAvailable
+  )
 
-  const handleAddToCart = (item: typeof menuItems[0]) => {
+  const filteredItems = activeCategory === 'all'
+    ? availableItems
+    : availableItems.filter(item => item.category === activeCategory)
+
+  const handleAddToCart = (item: typeof dineInMenuItems[0]) => {
     setSelectedItem(item)
     setIsModalOpen(true)
   }
