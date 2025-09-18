@@ -59,7 +59,17 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(order)
+    // Convert BigInt to Number for JSON serialization
+    const serializedOrder = {
+      ...order,
+      totalAmount: Number(order.totalAmount),
+      orderItems: order.orderItems.map(item => ({
+        ...item,
+        unitPrice: Number(item.unitPrice)
+      }))
+    }
+    
+    return NextResponse.json(serializedOrder)
   } catch (error) {
     console.error('Error creating order:', error)
     return NextResponse.json(
@@ -90,7 +100,17 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(orders)
+    // Convert BigInt to Number for JSON serialization
+    const serializedOrders = orders.map(order => ({
+      ...order,
+      totalAmount: Number(order.totalAmount),
+      orderItems: order.orderItems.map(item => ({
+        ...item,
+        unitPrice: Number(item.unitPrice)
+      }))
+    }))
+    
+    return NextResponse.json(serializedOrders)
   } catch (error) {
     console.error('Database not available, returning empty orders:', error)
     return NextResponse.json([])
