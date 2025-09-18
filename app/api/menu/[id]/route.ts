@@ -21,7 +21,13 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(menuItem)
+    // Convert BigInt to Number for JSON serialization
+    const serializedItem = {
+      ...menuItem,
+      price: Number(menuItem.price)
+    }
+
+    return NextResponse.json(serializedItem)
   } catch (error) {
     console.error('Database not available, using fallback data:', error)
     
@@ -96,7 +102,13 @@ export async function PUT(
       },
     })
 
-    return NextResponse.json(menuItem)
+    // Convert BigInt to Number for JSON serialization
+    const serializedItem = {
+      ...menuItem,
+      price: Number(menuItem.price)
+    }
+
+    return NextResponse.json(serializedItem)
   } catch (error) {
     console.error('Error updating menu item:', error)
     return NextResponse.json(

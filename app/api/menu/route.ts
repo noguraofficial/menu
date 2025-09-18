@@ -33,7 +33,13 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(menuItems)
+    // Convert BigInt to string for JSON serialization
+    const serializedItems = menuItems.map(item => ({
+      ...item,
+      price: Number(item.price) // Convert BigInt to Number
+    }))
+    
+    return NextResponse.json(serializedItems)
   } catch (error) {
     console.error('Database not available, using fallback data:', error)
     
