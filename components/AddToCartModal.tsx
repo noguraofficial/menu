@@ -14,21 +14,25 @@ interface AddToCartModalProps {
     description: string
     price: number
     image?: string
+    packagingOption?: boolean
   } | null
 }
 
 export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModalProps) {
   const { state, dispatch } = useCart()
   const [quantity, setQuantity] = useState(1)
+  const [useRestaurantPackaging, setUseRestaurantPackaging] = useState(false)
 
   // Get current quantity from cart
   const currentQuantity = item ? state.items.find(cartItem => cartItem.id === item.id)?.quantity || 0 : 0
+  const currentPackaging = item ? state.items.find(cartItem => cartItem.id === item.id)?.useRestaurantPackaging || false : false
 
   useEffect(() => {
     if (item) {
       setQuantity(currentQuantity > 0 ? currentQuantity : 1)
+      setUseRestaurantPackaging(currentPackaging)
     }
-  }, [item, currentQuantity])
+  }, [item, currentQuantity, currentPackaging])
 
   if (!isOpen || !item) return null
 
@@ -45,11 +49,20 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
           type: 'UPDATE_ITEM_QUANTITY', 
           payload: { id: item.id, quantity } 
         })
+        // Update packaging choice
+        dispatch({
+          type: 'UPDATE_ITEM_PACKAGING',
+          payload: { id: item.id, useRestaurantPackaging: useRestaurantPackaging }
+        })
       } else {
-        // Add new item
+        // Add new item with packaging choice
+        const itemWithPackaging = {
+          ...item,
+          useRestaurantPackaging: useRestaurantPackaging
+        }
         dispatch({ 
           type: 'ADD_ITEM', 
-          payload: item 
+          payload: itemWithPackaging 
         })
         // Then update quantity if needed
         if (quantity > 1) {
@@ -68,7 +81,8 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
     onClose()
   }
 
-  const totalPrice = item.price * quantity
+  const packagingFee = (item.packagingOption && useRestaurantPackaging) ? 8000 : 0
+  const totalPrice = (item.price + packagingFee) * quantity
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -129,6 +143,41 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
               </button>
             </div>
           </div>
+
+          {/* Packaging Option */}
+          {item.packagingOption && (
+            <div className="mb-6">
+              <span className="text-sm font-medium text-black block mb-3">Packaging Option</span>
+              <div className="space-y-3">
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="packaging"
+                    checked={!useRestaurantPackaging}
+                    onChange={() => setUseRestaurantPackaging(false)}
+                    className="w-4 h-4 text-black focus:ring-black border-gray-300"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900">Bring Your Own Container</span>
+                    <p className="text-xs text-gray-500">No additional charge</p>
+                  </div>
+                </label>
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="packaging"
+                    checked={useRestaurantPackaging}
+                    onChange={() => setUseRestaurantPackaging(true)}
+                    className="w-4 h-4 text-black focus:ring-black border-gray-300"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-gray-900">Use Restaurant Packaging</span>
+                    <p className="text-xs text-gray-500">+{formatCurrency(8000)} per item</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+          )}
 
           {/* Total */}
           <div className="flex items-center justify-between mb-6">

@@ -12,11 +12,13 @@ export interface MenuItem {
   isAvailable: boolean
   dineInAvailable?: boolean
   takeawayAvailable?: boolean
+  packagingOption?: boolean // true if can choose own packaging or restaurant packaging
 }
 
 export interface CartItem extends MenuItem {
   quantity: number
   notes?: string
+  useRestaurantPackaging?: boolean // true if using restaurant packaging (+Rp 8000)
 }
 
 interface CartState {
@@ -33,9 +35,16 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_ITEM_QUANTITY'; payload: { id: string; quantity: number } }
   | { type: 'UPDATE_ITEM_NOTES'; payload: { id: string; notes: string } }
+  | { type: 'UPDATE_ITEM_PACKAGING'; payload: { id: string; useRestaurantPackaging: boolean } }
   | { type: 'SET_ORDER_TYPE'; payload: 'dine-in' | 'takeaway' }
   | { type: 'SET_CUSTOMER_INFO'; payload: { name: string; phone: string; tableNumber?: string } }
   | { type: 'CLEAR_CART' }
+
+// Helper function to calculate item total including packaging fee
+const calculateItemTotal = (item: CartItem): number => {
+  const packagingFee = (item.packagingOption && item.useRestaurantPackaging) ? 8000 : 0
+  return (item.price + packagingFee) * item.quantity
+}
 
 const initialState: CartState = {
   items: [],
@@ -60,7 +69,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           items: updatedItems,
-          total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+          total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
         }
       } else {
         const newItem = { ...action.payload, quantity: 1 }
@@ -68,7 +77,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           items: updatedItems,
-          total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+          total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
         }
       }
     }
@@ -78,7 +87,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         ...state,
         items: updatedItems,
-        total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
       }
     }
     
@@ -96,7 +105,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           items: updatedItems,
-          total: updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+          total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
         }
       } else {
         // Item not found in cart, this should not happen with UPDATE_ITEM_QUANTITY
@@ -104,14 +113,23 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
     }
     
-    case 'UPDATE_ITEM_NOTES': {
-      const updatedItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, notes: action.payload.notes }
-          : item
-      )
-      return { ...state, items: updatedItems }
-    }
+            case 'UPDATE_ITEM_NOTES': {
+              const updatedItems = state.items.map(item =>
+                item.id === action.payload.id
+                  ? { ...item, notes: action.payload.notes }
+                  : item
+              )
+              return { ...state, items: updatedItems }
+            }
+
+            case 'UPDATE_ITEM_PACKAGING': {
+              const updatedItems = state.items.map(item =>
+                item.id === action.payload.id
+                  ? { ...item, useRestaurantPackaging: action.payload.useRestaurantPackaging }
+                  : item
+              )
+              return { ...state, items: updatedItems }
+            }
     
     case 'SET_ORDER_TYPE':
       return { ...state, orderType: action.payload }

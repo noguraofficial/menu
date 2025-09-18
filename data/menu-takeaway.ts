@@ -11,7 +11,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'ramen',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
   {
     id: 'takeaway-shoyu-ramen',
@@ -22,7 +23,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'ramen',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
   {
     id: 'takeaway-miso-ramen',
@@ -33,7 +35,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'ramen',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
 
   // Appetizers - Take Away Only
@@ -81,7 +84,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'rice',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
   {
     id: 'takeaway-teriyaki-chicken-don',
@@ -92,7 +96,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'rice',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
   {
     id: 'takeaway-katsu-don',
@@ -103,7 +108,8 @@ export const takeawayMenuItems: MenuItem[] = [
     category: 'rice',
     isAvailable: true,
     dineInAvailable: false,
-    takeawayAvailable: true
+    takeawayAvailable: true,
+    packagingOption: true
   },
 
   // Drinks - Take Away Only

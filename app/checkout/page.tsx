@@ -196,7 +196,7 @@ export default function CheckoutPage() {
                 {/* Item Total */}
                 <div className="text-right">
                   <p className="font-bold text-black text-lg">
-                    {formatCurrency(item.price * item.quantity + (state.orderType === 'takeaway' ? 8000 : 0))}
+                    {formatCurrency((item.price + (item.packagingOption && item.useRestaurantPackaging ? 8000 : 0)) * item.quantity)}
                   </p>
                 </div>
 
@@ -228,7 +228,7 @@ export default function CheckoutPage() {
             <div className="flex justify-between items-center mb-6">
               <span className="text-lg font-semibold text-black">Total:</span>
               <span className="text-2xl font-bold text-black">
-                {formatCurrency(state.total + (state.orderType === 'takeaway' ? state.items.length * 8000 : 0))}
+                {formatCurrency(state.total)}
               </span>
             </div>
 
