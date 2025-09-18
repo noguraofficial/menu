@@ -33,10 +33,21 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Convert BigInt to string for JSON serialization
+    // Convert BigInt to Number for JSON serialization
     const serializedItems = menuItems.map(item => ({
       ...item,
-      price: Number(item.price) // Convert BigInt to Number
+      price: Number(item.price), // Convert BigInt to Number
+      category: {
+        ...item.category,
+        // Ensure all category fields are serializable
+        id: String(item.category.id),
+        name: String(item.category.name),
+        description: item.category.description ? String(item.category.description) : null,
+        icon: item.category.icon ? String(item.category.icon) : null,
+        isActive: Boolean(item.category.isActive),
+        createdAt: item.category.createdAt ? new Date(item.category.createdAt).toISOString() : null,
+        updatedAt: item.category.updatedAt ? new Date(item.category.updatedAt).toISOString() : null
+      }
     }))
     
     return NextResponse.json(serializedItems)
