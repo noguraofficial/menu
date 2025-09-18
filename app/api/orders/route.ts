@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       if (menuItem) {
         let itemPrice = menuItem.price
         if (menuItem.packagingOption && item.useRestaurantPackaging) {
-          itemPrice += 8000 // Add packaging fee in cents
+          itemPrice += 800000 // Add packaging fee in cents (8000 rupiah = 800000 cents)
         }
         totalAmount += itemPrice * item.quantity
       }

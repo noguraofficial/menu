@@ -81,7 +81,7 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
     onClose()
   }
 
-  const packagingFee = (item.packagingOption && useRestaurantPackaging) ? 8000 : 0
+  const packagingFee = (item.packagingOption && useRestaurantPackaging) ? 800000 : 0 // 8000 rupiah = 800000 cents
   const totalPrice = (item.price + packagingFee) * quantity
 
   return (
@@ -172,7 +172,7 @@ export default function AddToCartModal({ isOpen, onClose, item }: AddToCartModal
                   />
                   <div className="flex-1">
                     <span className="text-sm font-medium text-gray-900">Use Restaurant Packaging</span>
-                    <p className="text-xs text-gray-500">+{formatCurrency(8000)} per item</p>
+                    <p className="text-xs text-gray-500">+{formatCurrency(800000)} per item</p>
                   </div>
                 </label>
               </div>

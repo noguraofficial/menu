@@ -42,7 +42,7 @@ type CartAction =
 
 // Helper function to calculate item total including packaging fee
 const calculateItemTotal = (item: CartItem): number => {
-  const packagingFee = (item.packagingOption && item.useRestaurantPackaging) ? 8000 : 0
+  const packagingFee = (item.packagingOption && item.useRestaurantPackaging) ? 800000 : 0 // 8000 rupiah = 800000 cents
   return (item.price + packagingFee) * item.quantity
 }
 
