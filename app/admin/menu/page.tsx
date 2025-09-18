@@ -102,11 +102,16 @@ export default function MenuManagement() {
           // Remove from local state
           setCurrentMenus(prev => prev.filter(item => item.id !== id))
         } else {
-          alert('Failed to delete item')
+          const errorData = await response.json()
+          if (response.status === 503) {
+            alert('Database not available. Delete operation is not supported in fallback mode.')
+          } else {
+            alert(`Failed to delete item: ${errorData.error || 'Unknown error'}`)
+          }
         }
       } catch (error) {
         console.error('Error deleting item:', error)
-        alert('Failed to delete item')
+        alert('Database not available. Delete operation is not supported in fallback mode.')
       }
     }
   }
@@ -137,7 +142,12 @@ export default function MenuManagement() {
             prev.map(item => item.id === editingItem.id ? updatedItem : item)
           )
         } else {
-          alert('Failed to update item')
+          const errorData = await response.json()
+          if (response.status === 503) {
+            alert('Database not available. Update operation is not supported in fallback mode.')
+          } else {
+            alert(`Failed to update item: ${errorData.error || 'Unknown error'}`)
+          }
         }
       } else {
         // Create new item
@@ -153,7 +163,12 @@ export default function MenuManagement() {
           const newItem = await response.json()
           setCurrentMenus(prev => [...prev, newItem])
         } else {
-          alert('Failed to create item')
+          const errorData = await response.json()
+          if (response.status === 503) {
+            alert('Database not available. Create operation is not supported in fallback mode.')
+          } else {
+            alert(`Failed to create item: ${errorData.error || 'Unknown error'}`)
+          }
         }
       }
 
@@ -161,7 +176,7 @@ export default function MenuManagement() {
       setEditingItem(null)
     } catch (error) {
       console.error('Error saving item:', error)
-      alert('Failed to save item')
+      alert('Database not available. Save operation is not supported in fallback mode.')
     }
   }
 
@@ -184,11 +199,16 @@ export default function MenuManagement() {
           prev.map(i => i.id === item.id ? { ...i, isAvailable: !i.isAvailable } : i)
         )
       } else {
-        alert('Failed to update availability')
+        const errorData = await response.json()
+        if (response.status === 503) {
+          alert('Database not available. Update operation is not supported in fallback mode.')
+        } else {
+          alert(`Failed to update availability: ${errorData.error || 'Unknown error'}`)
+        }
       }
     } catch (error) {
       console.error('Error updating availability:', error)
-      alert('Failed to update availability')
+      alert('Database not available. Update operation is not supported in fallback mode.')
     }
   }
 
@@ -251,6 +271,27 @@ export default function MenuManagement() {
           </div>
         </div>
 
+        {/* Database Status Banner */}
+        <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800">
+                Database Not Available
+              </h3>
+              <div className="mt-2 text-sm text-yellow-700">
+                <p>
+                  You are viewing menu data in fallback mode. Create, update, and delete operations are not available without a database connection.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Tabs */}
         <div className="mb-6">
           <div className="border-b border-gray-200">
@@ -283,10 +324,12 @@ export default function MenuManagement() {
         <div className="mb-6">
           <button
             onClick={handleAdd}
-            className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            disabled={true}
+            className="flex items-center space-x-2 bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed transition-colors"
+            title="Add operation not available in fallback mode"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Menu Item</span>
+            <span>Add Menu Item (Not Available)</span>
           </button>
         </div>
 
@@ -329,11 +372,9 @@ export default function MenuManagement() {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => toggleAvailability(menu)}
-                      className={`p-2 rounded-lg transition-colors ${
-                        menu.isAvailable
-                          ? 'text-green-600 hover:bg-green-100'
-                          : 'text-red-600 hover:bg-red-100'
-                      }`}
+                      disabled={true}
+                      className="p-2 text-gray-400 cursor-not-allowed rounded-lg transition-colors"
+                      title="Update operation not available in fallback mode"
                     >
                       {menu.isAvailable ? (
                         <Eye className="w-4 h-4" />
@@ -343,13 +384,17 @@ export default function MenuManagement() {
                     </button>
                     <button
                       onClick={() => handleEdit(menu)}
-                      className="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors"
+                      disabled={true}
+                      className="p-2 text-gray-400 cursor-not-allowed rounded-lg transition-colors"
+                      title="Edit operation not available in fallback mode"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(menu.id)}
-                      className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                      disabled={true}
+                      className="p-2 text-gray-400 cursor-not-allowed rounded-lg transition-colors"
+                      title="Delete operation not available in fallback mode"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
