@@ -29,7 +29,7 @@ model MenuItem {
   id                  String   @id @default(cuid())
   name                String
   description         String
-  price               Int      // Price in cents (e.g., 40000 = Rp 40,000)
+  price               BigInt   // Price in cents (e.g., 40000 = Rp 40,000)
   image               String?
   categoryId          String
   isAvailable         Boolean  @default(true)
@@ -52,7 +52,7 @@ model Order {
   customerPhone   String?
   orderType       OrderType   @default(DINE_IN)
   status          OrderStatus @default(PENDING)
-  totalAmount     Int         // Total in cents
+  totalAmount     BigInt      // Total in cents
   notes           String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -68,7 +68,7 @@ model OrderItem {
   orderId               String
   menuItemId            String
   quantity              Int
-  unitPrice             Int      // Price per unit in cents
+  unitPrice             BigInt   // Price per unit in cents
   useRestaurantPackaging Boolean @default(false)
   notes                 String?
   createdAt             DateTime @default(now())

@@ -85,11 +85,14 @@ export async function POST(request: NextRequest) {
       packagingOption,
     } = body
 
+    // Check if price is already in cents (large number) or in rupiah (smaller number)
+    const priceInCents = price > 1000000 ? price : Math.round(price * 100)
+    
     const menuItem = await prisma.menuItem.create({
       data: {
         name,
         description,
-        price: Math.round(price * 100), // Convert to cents
+        price: priceInCents, // Price in cents
         image,
         categoryId,
         isAvailable,

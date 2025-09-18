@@ -194,7 +194,7 @@ export default function MenuManagement() {
         },
         body: JSON.stringify({
           ...updatedItem,
-          price: Math.round(updatedItem.price * 100)
+          price: updatedItem.price // Price is already in cents, no conversion needed
         })
       })
 
