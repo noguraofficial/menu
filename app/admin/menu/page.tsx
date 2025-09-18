@@ -85,7 +85,8 @@ export default function MenuManagement() {
     setEditingItem(item)
     setFormData({
       ...item,
-      price: item.price / 100 // Convert from cents to rupiah
+      price: item.price / 100, // Convert from cents to rupiah
+      category: typeof item.category === 'object' ? item.category.id : item.category
     })
     setShowModal(true)
   }
@@ -115,6 +116,7 @@ export default function MenuManagement() {
       const itemData = {
         ...formData,
         price: Math.round((formData.price || 0) * 100), // Convert to cents
+        categoryId: formData.category, // Use categoryId for API
         dineInAvailable: activeTab === 'dine-in',
         takeawayAvailable: activeTab === 'takeaway'
       }
@@ -319,7 +321,7 @@ export default function MenuManagement() {
                           {formatCurrency(menu.price)}
                         </span>
                         <span className="text-sm text-gray-500 capitalize">
-                          {menu.category}
+                          {typeof menu.category === 'object' ? menu.category.name : menu.category}
                         </span>
                       </div>
                     </div>
