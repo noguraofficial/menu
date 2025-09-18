@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  menuItems   MenuItem[]
+
+  @@map("categories")
+}
+
+model MenuItem {
+  id                  String   @id @default(cuid())
+  name                String
+  description         String
+  price               Int      // Price in cents (e.g., 40000 = Rp 40,000)
+  image               String?
+  categoryId          String
+  isAvailable         Boolean  @default(true)
+  dineInAvailable     Boolean  @default(true)
+  takeawayAvailable   Boolean  @default(false)
+  packagingOption     Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  // Relations
+  category            Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems          OrderItem[]
+
+  @@map("menu_items")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  customerName    String
+  customerPhone   String?
+  orderType       OrderType   @default(DINE_IN)
+  status          OrderStatus @default(PENDING)
+  totalAmount     Int         // Total in cents
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  orderItems      OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                    String   @id @default(cuid())
+  orderId               String
+  menuItemId            String
+  quantity              Int
+  unitPrice             Int      // Price per unit in cents
+  useRestaurantPackaging Boolean @default(false)
+  notes                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  order                 Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem              MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+enum OrderType {
+  DINE_IN
+  TAKEAWAY
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}

@@ -3,32 +3,26 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
-import { dineInMenuItems, dineInCategories } from '@/data/menu-dine-in'
-import { takeawayMenuItems, takeawayCategories } from '@/data/menu-takeaway'
+import { useMenu, MenuItem } from '@/hooks/useMenu'
 import { formatCurrency } from '@/utils/format'
 import AddToCartModal from './AddToCartModal'
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState('all')
-  const [orderType, setOrderType] = useState('dine-in')
-  const [selectedItem, setSelectedItem] = useState<typeof dineInMenuItems[0] | null>(null)
+  const [orderType, setOrderType] = useState<'dine-in' | 'takeaway'>('dine-in')
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { state } = useCart()
 
-  // Get menu items based on order type
-  const currentMenuItems = orderType === 'dine-in' ? dineInMenuItems : takeawayMenuItems
-  const currentCategories = orderType === 'dine-in' ? dineInCategories : takeawayCategories
+  // Get menu data from database
+  const { menuItems, categories, loading, error } = useMenu(orderType)
 
-  // Filter items based on order type availability
-  const availableItems = currentMenuItems.filter(item => 
-    orderType === 'dine-in' ? item.dineInAvailable : item.takeawayAvailable
-  )
-
+  // Filter items based on category
   const filteredItems = activeCategory === 'all'
-    ? availableItems
-    : availableItems.filter(item => item.category === activeCategory)
+    ? menuItems
+    : menuItems.filter(item => item.categoryId === activeCategory)
 
-  const handleAddToCart = (item: typeof dineInMenuItems[0]) => {
+  const handleAddToCart = (item: MenuItem) => {
     setSelectedItem(item)
     setIsModalOpen(true)
   }
@@ -41,6 +35,43 @@ export default function MenuSection() {
   const closeModal = () => {
     setIsModalOpen(false)
     setSelectedItem(null)
+  }
+
+  if (loading) {
+    return (
+      <section id="menu" className="py-6 min-h-screen bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading menu...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="menu" className="py-6 min-h-screen bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">❌</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Error loading menu
+            </h3>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (
@@ -83,7 +114,7 @@ export default function MenuSection() {
           >
             All Items
           </button>
-                  {currentCategories.map((category) => (
+                  {categories.map((category) => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
