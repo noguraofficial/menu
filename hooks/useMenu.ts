@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { dineInMenuItems, dineInCategories } from '@/data/menu-dine-in'
+import { takeawayMenuItems, takeawayCategories } from '@/data/menu-takeaway'
 
 export interface MenuItem {
   id: string
@@ -39,21 +41,49 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         setLoading(true)
         setError(null)
 
-        // Fetch categories
-        const categoriesResponse = await fetch('/api/categories')
-        if (!categoriesResponse.ok) {
-          throw new Error('Failed to fetch categories')
-        }
-        const categoriesData = await categoriesResponse.json()
-        setCategories(categoriesData)
+        // Try to fetch from database first
+        try {
+          const [categoriesResponse, menuResponse] = await Promise.all([
+            fetch('/api/categories'),
+            fetch(`/api/menu?orderType=${orderType}`)
+          ])
 
-        // Fetch menu items
-        const menuResponse = await fetch(`/api/menu?orderType=${orderType}`)
-        if (!menuResponse.ok) {
-          throw new Error('Failed to fetch menu items')
+          if (categoriesResponse.ok && menuResponse.ok) {
+            const [categoriesData, menuData] = await Promise.all([
+              categoriesResponse.json(),
+              menuResponse.json()
+            ])
+            setCategories(categoriesData)
+            setMenuItems(menuData)
+            return
+          }
+        } catch (dbError) {
+          console.log('Database not available, using fallback data')
         }
-        const menuData = await menuResponse.json()
-        setMenuItems(menuData)
+
+        // Fallback to static data
+        const currentMenuItems = orderType === 'dine-in' ? dineInMenuItems : takeawayMenuItems
+        const currentCategories = orderType === 'dine-in' ? dineInCategories : takeawayCategories
+
+        // Convert static data to match database format
+        const formattedMenuItems = currentMenuItems.map(item => ({
+          ...item,
+          categoryId: item.category,
+          category: {
+            id: item.category,
+            name: currentCategories.find(cat => cat.id === item.category)?.name || item.category,
+            description: '',
+            icon: ''
+          }
+        }))
+
+        const formattedCategories = currentCategories.map(cat => ({
+          ...cat,
+          isActive: true
+        }))
+
+        setCategories(formattedCategories)
+        setMenuItems(formattedMenuItems)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred')
         console.error('Error fetching data:', err)
@@ -75,22 +105,50 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
       const fetchData = async () => {
         try {
           setError(null)
-          const [categoriesResponse, menuResponse] = await Promise.all([
-            fetch('/api/categories'),
-            fetch(`/api/menu?orderType=${orderType}`)
-          ])
 
-          if (!categoriesResponse.ok || !menuResponse.ok) {
-            throw new Error('Failed to fetch data')
+          // Try to fetch from database first
+          try {
+            const [categoriesResponse, menuResponse] = await Promise.all([
+              fetch('/api/categories'),
+              fetch(`/api/menu?orderType=${orderType}`)
+            ])
+
+            if (categoriesResponse.ok && menuResponse.ok) {
+              const [categoriesData, menuData] = await Promise.all([
+                categoriesResponse.json(),
+                menuResponse.json()
+              ])
+              setCategories(categoriesData)
+              setMenuItems(menuData)
+              return
+            }
+          } catch (dbError) {
+            console.log('Database not available, using fallback data')
           }
 
-          const [categoriesData, menuData] = await Promise.all([
-            categoriesResponse.json(),
-            menuResponse.json()
-          ])
+          // Fallback to static data
+          const currentMenuItems = orderType === 'dine-in' ? dineInMenuItems : takeawayMenuItems
+          const currentCategories = orderType === 'dine-in' ? dineInCategories : takeawayCategories
 
-          setCategories(categoriesData)
-          setMenuItems(menuData)
+          // Convert static data to match database format
+          const formattedMenuItems = currentMenuItems.map(item => ({
+            ...item,
+            categoryId: item.category,
+            category: {
+              id: item.category,
+              name: currentCategories.find(cat => cat.id === item.category)?.name || item.category,
+              description: '',
+              icon: ''
+            }
+          }))
+
+          const formattedCategories = currentCategories.map(cat => ({
+            ...cat,
+            isActive: true
+          }))
+
+          setCategories(formattedCategories)
+          setMenuItems(formattedMenuItems)
         } catch (err) {
           setError(err instanceof Error ? err.message : 'An error occurred')
         } finally {
