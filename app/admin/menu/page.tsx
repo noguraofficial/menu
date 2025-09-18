@@ -3,33 +3,24 @@
 import { useState } from 'react'
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
 import { formatCurrency } from '@/utils/format'
-
-interface MenuItem {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: string
-  isAvailable: boolean
-  dineInAvailable: boolean
-  takeawayAvailable: boolean
-  image?: string
-}
+import { MenuItem } from '@/context/CartContext'
 
 export default function MenuManagement() {
-  const [menus, setMenus] = useState<MenuItem[]>([
+  const [activeTab, setActiveTab] = useState<'dine-in' | 'takeaway'>('dine-in')
+  
+  const [dineInMenus, setDineInMenus] = useState<MenuItem[]>([
     {
-      id: '1',
+      id: 'dine-in-1',
       name: 'Tori Paitan',
       description: 'Ramen dengan kaldu ayam yang kental dan creamy',
       price: 40000,
       category: 'ramen',
       isAvailable: true,
       dineInAvailable: true,
-      takeawayAvailable: true
+      takeawayAvailable: false
     },
     {
-      id: '2',
+      id: 'dine-in-2',
       name: 'Tonkotsu Ramen',
       description: 'Ramen dengan kaldu tulang babi yang kental dan gurih',
       price: 45000,
@@ -39,13 +30,46 @@ export default function MenuManagement() {
       takeawayAvailable: false
     },
     {
-      id: '3',
+      id: 'dine-in-3',
       name: 'Gyoza (6 pcs)',
       description: 'Dumpling isi daging babi dan sayuran',
       price: 25000,
       category: 'appetizer',
       isAvailable: true,
       dineInAvailable: true,
+      takeawayAvailable: false
+    }
+  ])
+
+  const [takeawayMenus, setTakeawayMenus] = useState<MenuItem[]>([
+    {
+      id: 'takeaway-1',
+      name: 'Tori Paitan (Take Away)',
+      description: 'Ramen dengan kaldu ayam yang kental dan creamy, dikemas khusus untuk take away',
+      price: 40000,
+      category: 'ramen',
+      isAvailable: true,
+      dineInAvailable: false,
+      takeawayAvailable: true
+    },
+    {
+      id: 'takeaway-2',
+      name: 'Shoyu Ramen (Take Away)',
+      description: 'Ramen dengan kaldu ayam dan kecap asin, dikemas untuk take away',
+      price: 42000,
+      category: 'ramen',
+      isAvailable: true,
+      dineInAvailable: false,
+      takeawayAvailable: true
+    },
+    {
+      id: 'takeaway-3',
+      name: 'Gyoza (6 pcs) - Take Away',
+      description: 'Dumpling isi daging babi dan sayuran, dikemas untuk take away',
+      price: 25000,
+      category: 'appetizer',
+      isAvailable: true,
+      dineInAvailable: false,
       takeawayAvailable: true
     }
   ])
@@ -59,8 +83,12 @@ export default function MenuManagement() {
     category: 'ramen',
     isAvailable: true,
     dineInAvailable: true,
-    takeawayAvailable: true
+    takeawayAvailable: false
   })
+
+  // Get current menu based on active tab
+  const currentMenus = activeTab === 'dine-in' ? dineInMenus : takeawayMenus
+  const setCurrentMenus = activeTab === 'dine-in' ? setDineInMenus : setTakeawayMenus
 
   const categories = [
     { id: 'ramen', name: 'Ramen' },
@@ -77,8 +105,8 @@ export default function MenuManagement() {
       price: 0,
       category: 'ramen',
       isAvailable: true,
-      dineInAvailable: true,
-      takeawayAvailable: true
+      dineInAvailable: activeTab === 'dine-in',
+      takeawayAvailable: activeTab === 'takeaway'
     })
     setShowModal(true)
   }
@@ -92,7 +120,7 @@ export default function MenuManagement() {
   const handleSave = () => {
     if (editingItem) {
       // Update existing item
-      setMenus(menus.map(menu => 
+      setCurrentMenus(currentMenus.map(menu => 
         menu.id === editingItem.id 
           ? { ...formData as MenuItem, id: editingItem.id }
           : menu
@@ -101,21 +129,21 @@ export default function MenuManagement() {
       // Add new item
       const newItem: MenuItem = {
         ...formData as MenuItem,
-        id: Date.now().toString()
+        id: `${activeTab}-${Date.now()}`
       }
-      setMenus([...menus, newItem])
+      setCurrentMenus([...currentMenus, newItem])
     }
     setShowModal(false)
   }
 
   const handleDelete = (id: string) => {
     if (confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
-      setMenus(menus.filter(menu => menu.id !== id))
+      setCurrentMenus(currentMenus.filter(menu => menu.id !== id))
     }
   }
 
   const toggleAvailability = (id: string) => {
-    setMenus(menus.map(menu => 
+    setCurrentMenus(currentMenus.map(menu => 
       menu.id === id 
         ? { ...menu, isAvailable: !menu.isAvailable }
         : menu
@@ -141,10 +169,34 @@ export default function MenuManagement() {
         </button>
       </div>
 
+      {/* Order Type Tabs */}
+      <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+        <button
+          onClick={() => setActiveTab('dine-in')}
+          className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeTab === 'dine-in'
+              ? 'bg-white text-black shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Dine In Menu ({dineInMenus.length} items)
+        </button>
+        <button
+          onClick={() => setActiveTab('takeaway')}
+          className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            activeTab === 'takeaway'
+              ? 'bg-white text-black shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Take Away Menu ({takeawayMenus.length} items)
+        </button>
+      </div>
+
       {/* Menu List */}
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
-          {menus.map((menu) => (
+          {currentMenus.map((menu) => (
             <li key={menu.id}>
               <div className="px-4 py-4 flex items-center justify-between">
                 <div className="flex items-center">
@@ -180,18 +232,11 @@ export default function MenuManagement() {
                       </span>
                       <div className="flex space-x-2">
                         <span className={`px-2 py-1 text-xs rounded-full ${
-                          menu.dineInAvailable 
+                          activeTab === 'dine-in'
                             ? 'bg-blue-100 text-blue-800' 
-                            : 'bg-gray-100 text-gray-500'
+                            : 'bg-orange-100 text-orange-800'
                         }`}>
-                          Dine In
-                        </span>
-                        <span className={`px-2 py-1 text-xs rounded-full ${
-                          menu.takeawayAvailable 
-                            ? 'bg-orange-100 text-orange-800' 
-                            : 'bg-gray-100 text-gray-500'
-                        }`}>
-                          Take Away
+                          {activeTab === 'dine-in' ? 'Dine In' : 'Take Away'}
                         </span>
                       </div>
                     </div>
@@ -278,36 +323,14 @@ export default function MenuManagement() {
                       </select>
                     </div>
 
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.isAvailable || false}
-                          onChange={(e) => setFormData({...formData, isAvailable: e.target.checked})}
-                          className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-                        />
-                        <label className="ml-2 block text-sm text-gray-900">Available</label>
-                      </div>
-
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.dineInAvailable || false}
-                          onChange={(e) => setFormData({...formData, dineInAvailable: e.target.checked})}
-                          className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-                        />
-                        <label className="ml-2 block text-sm text-gray-900">Dine In Available</label>
-                      </div>
-
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.takeawayAvailable || false}
-                          onChange={(e) => setFormData({...formData, takeawayAvailable: e.target.checked})}
-                          className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
-                        />
-                        <label className="ml-2 block text-sm text-gray-900">Take Away Available</label>
-                      </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.isAvailable || false}
+                        onChange={(e) => setFormData({...formData, isAvailable: e.target.checked})}
+                        className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                      />
+                      <label className="ml-2 block text-sm text-gray-900">Available</label>
                     </div>
                   </div>
                 </div>

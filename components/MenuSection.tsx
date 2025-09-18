@@ -3,20 +3,25 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
-import { menuItems, menuCategories } from '@/data/menu'
+import { dineInMenuItems, dineInCategories } from '@/data/menu-dine-in'
+import { takeawayMenuItems, takeawayCategories } from '@/data/menu-takeaway'
 import { formatCurrency } from '@/utils/format'
 import AddToCartModal from './AddToCartModal'
 
 export default function MenuSection() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [orderType, setOrderType] = useState('dine-in')
-  const [selectedItem, setSelectedItem] = useState<typeof menuItems[0] | null>(null)
+  const [selectedItem, setSelectedItem] = useState<typeof dineInMenuItems[0] | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { state } = useCart()
 
-  const filteredItems = activeCategory === 'all' 
-    ? menuItems 
-    : menuItems.filter(item => item.category === activeCategory)
+  // Get menu items based on order type
+  const currentMenuItems = orderType === 'dine-in' ? dineInMenuItems : takeawayMenuItems
+  const currentCategories = orderType === 'dine-in' ? dineInCategories : takeawayCategories
+
+  const filteredItems = activeCategory === 'all'
+    ? currentMenuItems
+    : currentMenuItems.filter(item => item.category === activeCategory)
 
   const handleAddToCart = (item: typeof menuItems[0]) => {
     setSelectedItem(item)
@@ -73,7 +78,7 @@ export default function MenuSection() {
           >
             All Items
           </button>
-          {menuCategories.map((category) => (
+                  {currentCategories.map((category) => (
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
