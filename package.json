@@ -17,6 +17,8 @@
     "setup:supabase": "./setup-supabase.sh",
     "generate:secret": "node generate-secret.js",
     "test:production": "node test-production.js",
+    "test:production-api": "node test-production-api.js",
+    "api:local": "node fix-local-development.js",
     "postinstall": "prisma generate",
     "railway:deploy": "railway up",
     "railway:logs": "railway logs"
@@ -32,6 +34,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "clsx": "^2.0.0",
+    "express": "^5.1.0",
     "lucide-react": "^0.294.0",
     "multer": "^2.0.2",
     "next": "14.0.4",
