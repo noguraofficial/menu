@@ -19,6 +19,7 @@
     "test:production": "node test-production.js",
     "test:production-api": "node test-production-api.js",
     "api:local": "node fix-local-development.js",
+    "dev:full": "./start-dev.sh",
     "postinstall": "prisma generate",
     "railway:deploy": "railway up",
     "railway:logs": "railway logs"

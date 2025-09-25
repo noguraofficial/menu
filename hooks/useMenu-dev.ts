@@ -39,14 +39,15 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         setLoading(true)
         setError(null)
 
-        // Check if we're in development mode and use local API server
+        // Check if we're in development mode
         const isDevelopment = process.env.NODE_ENV === 'development'
         const baseUrl = isDevelopment ? 'http://localhost:3001' : ''
-        
-        // Fetch from database using local API server in development or Netlify Functions in production
+
+        // Fetch from database using local API server in development
+        // or Netlify Functions in production
         const [categoriesResponse, menuResponse] = await Promise.all([
-          fetch(`${baseUrl}/api/categories`),
-          fetch(`${baseUrl}/api/menu?orderType=${orderType}`)
+          fetch(`${baseUrl}/.netlify/functions/categories`),
+          fetch(`${baseUrl}/.netlify/functions/menu?orderType=${orderType}`)
         ])
 
         if (categoriesResponse.ok && menuResponse.ok) {
@@ -81,14 +82,15 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         try {
           setError(null)
 
-          // Check if we're in development mode and use local API server
+          // Check if we're in development mode
           const isDevelopment = process.env.NODE_ENV === 'development'
           const baseUrl = isDevelopment ? 'http://localhost:3001' : ''
-          
-          // Fetch from database using local API server in development or Netlify Functions in production
+
+          // Fetch from database using local API server in development
+          // or Netlify Functions in production
           const [categoriesResponse, menuResponse] = await Promise.all([
-            fetch(`${baseUrl}/api/categories`),
-            fetch(`${baseUrl}/api/menu?orderType=${orderType}`)
+            fetch(`${baseUrl}/.netlify/functions/categories`),
+            fetch(`${baseUrl}/.netlify/functions/menu?orderType=${orderType}`)
           ])
 
           if (categoriesResponse.ok && menuResponse.ok) {
