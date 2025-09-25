@@ -1,26 +1,5 @@
-const multer = require('multer')
-const path = require('path')
-const fs = require('fs')
-
-// Configure multer for memory storage
-const storage = multer.memoryStorage()
-const upload = multer({ 
-  storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase())
-    const mimetype = allowedTypes.test(file.mimetype)
-    
-    if (mimetype && extname) {
-      return cb(null, true)
-    } else {
-      cb(new Error('Only image files are allowed'))
-    }
-  }
-})
+// Simple file upload handler without multer
+// In production, you should use a cloud storage service like Cloudinary or AWS S3
 
 exports.handler = async (event, context) => {
   // Set CORS headers
@@ -49,18 +28,8 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // Parse multipart form data
-    const boundary = event.headers['content-type']?.split('boundary=')[1]
-    if (!boundary) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'No boundary found in content-type' })
-      }
-    }
-
     // For Netlify Functions, we'll use a simpler approach
-    // In production, you might want to use a service like Cloudinary or AWS S3
+    // In production, you should use a cloud storage service like Cloudinary or AWS S3
     const timestamp = Date.now()
     const filename = `${timestamp}-${Math.random().toString(36).substring(7)}.jpg`
     
