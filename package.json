@@ -13,6 +13,8 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
+    "db:test": "node test-db-connection.js",
+    "setup:supabase": "./setup-supabase.sh",
     "postinstall": "prisma generate",
     "railway:deploy": "railway up",
     "railway:logs": "railway logs"
