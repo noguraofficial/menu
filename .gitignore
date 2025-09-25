@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn/install-state.gz
 
 # testing
 /coverage
@@ -26,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -34,7 +36,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/app/generated/prisma
+# prisma
+/prisma/migrations
 
-# uploaded images
-/public/uploads
+# netlify
+.netlify
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db

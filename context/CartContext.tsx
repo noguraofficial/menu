@@ -194,6 +194,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+export { CartContext }
+
 export function useCart() {
   const context = useContext(CartContext)
   if (!context) {

@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react'
-import { MenuItem as CartMenuItem } from '@/context/CartContext'
 import { dineInMenuItems, dineInCategories } from '@/data/menu-dine-in'
 import { takeawayMenuItems, takeawayCategories } from '@/data/menu-takeaway'
 
-export interface MenuItem extends Omit<CartMenuItem, 'image'> {
-  image: string // Override to make required
+export interface MenuItem {
+  id: string
+  name: string
+  description: string
+  price: number
+  image: string
   categoryId: string
+  isAvailable: boolean
+  dineInAvailable?: boolean
+  takeawayAvailable?: boolean
   packagingOption: boolean
   category: {
     id: string

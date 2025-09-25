@@ -19,12 +19,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     if (quantity === 0) {
       dispatch({ type: 'REMOVE_ITEM', payload: id })
     } else {
-      dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
+      dispatch({ type: 'UPDATE_ITEM_QUANTITY', payload: { cartItemId: id, quantity } })
     }
   }
 
   const handleNotesChange = (id: string, notes: string) => {
-    dispatch({ type: 'UPDATE_NOTES', payload: { id, notes } })
+    dispatch({ type: 'UPDATE_ITEM_NOTES', payload: { cartItemId: id, notes } })
   }
 
   const handleCheckout = () => {
