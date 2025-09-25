@@ -18,13 +18,13 @@ export default function CategoryManagement() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch categories from API
+  // Fetch categories from Netlify Functions
   const fetchCategories = async () => {
     try {
       setLoading(true)
       setError(null)
 
-      const response = await fetch('/api/categories')
+      const response = await fetch('/.netlify/functions/categories')
       if (response.ok) {
         const data = await response.json()
         setCategories(data)
@@ -76,7 +76,7 @@ export default function CategoryManagement() {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this category?')) {
       try {
-        const response = await fetch(`/api/categories/${id}`, {
+        const response = await fetch(`/.netlify/functions/categories?id=${id}`, {
           method: 'DELETE'
         })
         
@@ -96,7 +96,7 @@ export default function CategoryManagement() {
     try {
       if (editingCategory) {
         // Update existing category
-        const response = await fetch(`/api/categories/${editingCategory.id}`, {
+        const response = await fetch(`/.netlify/functions/categories?id=${editingCategory.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ export default function CategoryManagement() {
         }
       } else {
         // Create new category
-        const response = await fetch('/api/categories', {
+        const response = await fetch('/.netlify/functions/categories', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ export default function CategoryManagement() {
   const toggleActive = async (category: Category) => {
     try {
       const updatedCategory = { ...category, isActive: !category.isActive }
-      const response = await fetch(`/api/categories/${category.id}`, {
+      const response = await fetch(`/.netlify/functions/categories?id=${category.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

@@ -58,9 +58,17 @@ exports.handler = async (event, context) => {
     }
 
     if (event.httpMethod === 'PUT') {
-      const { id } = event.pathParameters || {}
+      const { id } = event.queryStringParameters || {}
       const body = JSON.parse(event.body)
       const { name, description, icon, isActive, priority } = body
+
+      if (!id) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Category ID is required' })
+        }
+      }
 
       const category = await prisma.category.update({
         where: { id },
@@ -81,7 +89,15 @@ exports.handler = async (event, context) => {
     }
 
     if (event.httpMethod === 'DELETE') {
-      const { id } = event.pathParameters || {}
+      const { id } = event.queryStringParameters || {}
+
+      if (!id) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ error: 'Category ID is required' })
+        }
+      }
 
       await prisma.category.delete({
         where: { id }

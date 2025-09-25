@@ -20,14 +20,14 @@ export default function MenuManagement() {
       setError(null)
 
       // Fetch dine-in menus
-      const dineInResponse = await fetch('/api/menu?orderType=dine-in')
+      const dineInResponse = await fetch('/.netlify/functions/menu?orderType=dine-in')
       if (dineInResponse.ok) {
         const dineInData = await dineInResponse.json()
         setDineInMenus(dineInData)
       }
 
       // Fetch takeaway menus
-      const takeawayResponse = await fetch('/api/menu?orderType=takeaway')
+      const takeawayResponse = await fetch('/.netlify/functions/menu?orderType=takeaway')
       if (takeawayResponse.ok) {
         const takeawayData = await takeawayResponse.json()
         setTakeawayMenus(takeawayData)
