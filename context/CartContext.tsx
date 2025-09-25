@@ -19,6 +19,7 @@ export interface CartItem extends MenuItem {
   quantity: number
   notes?: string
   useRestaurantPackaging?: boolean // true if using restaurant packaging (+Rp 8000)
+  cartItemId: string // Unique ID for each cart entry
 }
 
 interface CartState {
@@ -31,18 +32,18 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: MenuItem }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'UPDATE_ITEM_QUANTITY'; payload: { id: string; quantity: number } }
-  | { type: 'UPDATE_ITEM_NOTES'; payload: { id: string; notes: string } }
-  | { type: 'UPDATE_ITEM_PACKAGING'; payload: { id: string; useRestaurantPackaging: boolean } }
+  | { type: 'ADD_ITEM'; payload: MenuItem & { quantity?: number; notes?: string; useRestaurantPackaging?: boolean } }
+  | { type: 'REMOVE_ITEM'; payload: string } // cartItemId
+  | { type: 'UPDATE_ITEM_QUANTITY'; payload: { cartItemId: string; quantity: number } }
+  | { type: 'UPDATE_ITEM_NOTES'; payload: { cartItemId: string; notes: string } }
+  | { type: 'UPDATE_ITEM_PACKAGING'; payload: { cartItemId: string; useRestaurantPackaging: boolean } }
   | { type: 'SET_ORDER_TYPE'; payload: 'dine-in' | 'takeaway' }
   | { type: 'SET_CUSTOMER_INFO'; payload: { name: string; phone: string; tableNumber?: string } }
   | { type: 'CLEAR_CART' }
 
 // Helper function to calculate item total including packaging fee
 const calculateItemTotal = (item: CartItem): number => {
-  const packagingFee = (item.packagingOption && item.useRestaurantPackaging) ? 800000 : 0 // 8000 rupiah = 800000 cents
+  const packagingFee = (item.packagingOption && item.useRestaurantPackaging) ? 8000 : 0 // 8000 rupiah
   return (item.price + packagingFee) * item.quantity
 }
 
@@ -58,32 +59,25 @@ const initialState: CartState = {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItem = state.items.find(item => item.id === action.payload.id)
-      
-      if (existingItem) {
-        const updatedItems = state.items.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-        return {
-          ...state,
-          items: updatedItems,
-          total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
-        }
-      } else {
-        const newItem = { ...action.payload, quantity: 1 }
-        const updatedItems = [...state.items, newItem]
-        return {
-          ...state,
-          items: updatedItems,
-          total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
-        }
+      // Always create a new cart entry, even for the same menu item
+      const cartItemId = `${action.payload.id}-${Date.now()}`
+      const newItem: CartItem = {
+        ...action.payload,
+        cartItemId,
+        quantity: action.payload.quantity || 1,
+        notes: action.payload.notes || '',
+        useRestaurantPackaging: action.payload.useRestaurantPackaging || false
+      }
+      const updatedItems = [...state.items, newItem]
+      return {
+        ...state,
+        items: updatedItems,
+        total: updatedItems.reduce((sum, item) => sum + calculateItemTotal(item), 0)
       }
     }
     
     case 'REMOVE_ITEM': {
-      const updatedItems = state.items.filter(item => item.id !== action.payload)
+      const updatedItems = state.items.filter(item => item.cartItemId !== action.payload)
       return {
         ...state,
         items: updatedItems,
@@ -92,12 +86,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     }
     
     case 'UPDATE_ITEM_QUANTITY': {
-      const existingItem = state.items.find(item => item.id === action.payload.id)
+      const existingItem = state.items.find(item => item.cartItemId === action.payload.cartItemId)
       
       if (existingItem) {
         // Update existing item
         const updatedItems = state.items.map(item =>
-          item.id === action.payload.id
+          item.cartItemId === action.payload.cartItemId
             ? { ...item, quantity: Math.max(0, action.payload.quantity) }
             : item
         ).filter(item => item.quantity > 0)
@@ -115,7 +109,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     
             case 'UPDATE_ITEM_NOTES': {
               const updatedItems = state.items.map(item =>
-                item.id === action.payload.id
+                item.cartItemId === action.payload.cartItemId
                   ? { ...item, notes: action.payload.notes }
                   : item
               )
@@ -124,7 +118,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
             case 'UPDATE_ITEM_PACKAGING': {
               const updatedItems = state.items.map(item =>
-                item.id === action.payload.id
+                item.cartItemId === action.payload.cartItemId
                   ? { ...item, useRestaurantPackaging: action.payload.useRestaurantPackaging }
                   : item
               )

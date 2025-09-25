@@ -28,9 +28,19 @@ export async function GET(request: NextRequest) {
       include: {
         category: true,
       },
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: [
+        {
+          category: {
+            priority: 'asc',
+          },
+        },
+        {
+          priority: 'asc',
+        },
+        {
+          name: 'asc',
+        },
+      ],
     })
 
     // Convert BigInt to Number for JSON serialization
@@ -102,14 +112,12 @@ export async function POST(request: NextRequest) {
       packagingOption,
     } = body
 
-    // Check if price is already in cents (large number) or in rupiah (smaller number)
-    const priceInCents = price > 1000000 ? price : Math.round(price * 100)
-    
+    // Price is already in Rupiah, no conversion needed
     const menuItem = await prisma.menuItem.create({
       data: {
         name,
         description,
-        price: priceInCents, // Price in cents
+        price: price, // Price in Rupiah
         image,
         categoryId,
         isAvailable,

@@ -13,6 +13,7 @@ async function main() {
       description: 'Authentic Japanese ramen with rich broth',
       icon: '🍜',
       isActive: true,
+      priority: 1, // Highest priority
     },
   })
 
@@ -25,6 +26,7 @@ async function main() {
       description: 'Japanese appetizers and side dishes',
       icon: '🥟',
       isActive: true,
+      priority: 2,
     },
   })
 
@@ -37,6 +39,7 @@ async function main() {
       description: 'Hearty rice bowls with various toppings',
       icon: '🍚',
       isActive: true,
+      priority: 3,
     },
   })
 
@@ -49,6 +52,7 @@ async function main() {
       description: 'Sweet treats and desserts',
       icon: '🍰',
       isActive: true,
+      priority: 4,
     },
   })
 
@@ -61,6 +65,7 @@ async function main() {
       description: 'Japanese drinks and beverages',
       icon: '🥤',
       isActive: true,
+      priority: 5,
     },
   })
 
@@ -364,7 +369,7 @@ async function main() {
       update: {},
       create: {
         ...item,
-        price: item.price * 100, // Convert to cents
+        price: item.price, // Price is already in Rupiah
       },
     })
   }

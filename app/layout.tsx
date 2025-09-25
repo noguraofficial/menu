@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import CartSummary from '@/components/CartSummary'
 import { CartProvider } from '@/context/CartContext'
+import { SettingsProvider } from '@/context/SettingsContext'
 
 export const metadata: Metadata = {
   title: 'Nogura Ramen Bar - Menu Pemesanan',
@@ -24,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className="bg-white min-h-screen">
-        <CartProvider>
-          <Header />
-          <main className="pb-20">
-            {children}
-          </main>
-          <CartSummary />
-        </CartProvider>
+        <SettingsProvider>
+          <CartProvider>
+            <Header />
+            <main className="pb-20">
+              {children}
+            </main>
+            <CartSummary />
+          </CartProvider>
+        </SettingsProvider>
       </body>
     </html>
   )

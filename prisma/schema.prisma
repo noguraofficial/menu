@@ -16,6 +16,7 @@ model Category {
   description String?
   icon        String?
   isActive    Boolean  @default(true)
+  priority    Int      @default(0) // Priority for ordering (lower number = higher priority)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -29,13 +30,14 @@ model MenuItem {
   id                  String   @id @default(cuid())
   name                String
   description         String
-  price               BigInt   // Price in cents (e.g., 40000 = Rp 40,000)
+  price               Int      // Price in Rupiah (e.g., 40000 = Rp 40,000)
   image               String?
   categoryId          String
   isAvailable         Boolean  @default(true)
   dineInAvailable     Boolean  @default(true)
   takeawayAvailable   Boolean  @default(false)
   packagingOption     Boolean  @default(false)
+  priority            Int      @default(0) // Priority for ordering (lower number = higher priority)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -52,7 +54,7 @@ model Order {
   customerPhone   String?
   orderType       OrderType   @default(DINE_IN)
   status          OrderStatus @default(PENDING)
-  totalAmount     BigInt      // Total in cents
+  totalAmount     Int         // Total in Rupiah
   notes           String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -68,7 +70,7 @@ model OrderItem {
   orderId               String
   menuItemId            String
   quantity              Int
-  unitPrice             BigInt   // Price per unit in cents
+  unitPrice             Int      // Price per unit in Rupiah
   useRestaurantPackaging Boolean @default(false)
   notes                 String?
   createdAt             DateTime @default(now())

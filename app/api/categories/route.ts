@@ -9,9 +9,14 @@ export async function GET() {
       where: {
         isActive: true,
       },
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: [
+        {
+          priority: 'asc',
+        },
+        {
+          name: 'asc',
+        },
+      ],
     })
 
     return NextResponse.json(categories)
@@ -36,7 +41,7 @@ export async function POST(request: NextRequest) {
   try {
     const { prisma } = await import('@/lib/database')
     const body = await request.json()
-    const { name, description, icon, isActive } = body
+    const { name, description, icon, isActive, priority } = body
 
     const category = await prisma.category.create({
       data: {
@@ -44,6 +49,7 @@ export async function POST(request: NextRequest) {
         description,
         icon,
         isActive,
+        priority: priority || 0,
       },
     })
 

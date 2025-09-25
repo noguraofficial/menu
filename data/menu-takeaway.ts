@@ -1,7 +1,7 @@
 import { MenuItem } from '@/context/CartContext'
 
 export const takeawayMenuItems: MenuItem[] = [
-  // Ramen - Take Away Only
+  // Ramen - Take Away
   {
     id: 'takeaway-tori-paitan',
     name: 'Tori Paitan (Take Away)',
@@ -39,7 +39,7 @@ export const takeawayMenuItems: MenuItem[] = [
     packagingOption: true
   },
 
-  // Appetizers - Take Away Only
+  // Appetizers - Take Away
   {
     id: 'takeaway-gyoza',
     name: 'Gyoza (6 pcs) - Take Away',
@@ -74,7 +74,7 @@ export const takeawayMenuItems: MenuItem[] = [
     takeawayAvailable: true
   },
 
-  // Rice Bowls - Take Away Only
+  // Rice Bowls - Take Away
   {
     id: 'takeaway-chashu-don',
     name: 'Chashu Ayam Don - Take Away',
@@ -112,7 +112,7 @@ export const takeawayMenuItems: MenuItem[] = [
     packagingOption: true
   },
 
-  // Drinks - Take Away Only
+  // Drinks - Take Away
   {
     id: 'takeaway-green-tea',
     name: 'Green Tea - Take Away',

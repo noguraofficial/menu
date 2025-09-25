@@ -1,7 +1,6 @@
 export function formatCurrency(amount: number): string {
-  // Convert from cents to rupiah (divide by 100)
-  const rupiah = amount / 100
-  const formatted = rupiah.toLocaleString('id-ID')
+  // Amount is already in Rupiah, no conversion needed
+  const formatted = amount.toLocaleString('id-ID')
   return `Rp ${formatted}`
 }
 

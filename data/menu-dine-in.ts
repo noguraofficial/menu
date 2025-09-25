@@ -1,7 +1,7 @@
 import { MenuItem } from '@/context/CartContext'
 
 export const dineInMenuItems: MenuItem[] = [
-  // Ramen - Dine In Only
+  // Ramen - Dine In
   {
     id: 'dine-in-tori-paitan',
     name: 'Tori Paitan',
@@ -58,7 +58,7 @@ export const dineInMenuItems: MenuItem[] = [
     takeawayAvailable: false
   },
 
-  // Appetizers - Dine In Only
+  // Appetizers - Dine In
   {
     id: 'dine-in-gyoza',
     name: 'Gyoza (6 pcs)',
@@ -104,7 +104,7 @@ export const dineInMenuItems: MenuItem[] = [
     takeawayAvailable: false
   },
 
-  // Rice Bowls - Dine In Only
+  // Rice Bowls - Dine In
   {
     id: 'dine-in-chashu-don',
     name: 'Chashu Ayam Don',
@@ -139,7 +139,7 @@ export const dineInMenuItems: MenuItem[] = [
     takeawayAvailable: false
   },
 
-  // Desserts - Dine In Only
+  // Desserts - Dine In
   {
     id: 'dine-in-japanese-purin',
     name: 'Japanese Purin Caramel',
@@ -163,7 +163,7 @@ export const dineInMenuItems: MenuItem[] = [
     takeawayAvailable: false
   },
 
-  // Drinks - Dine In Only
+  // Drinks - Dine In
   {
     id: 'dine-in-green-tea',
     name: 'Green Tea',

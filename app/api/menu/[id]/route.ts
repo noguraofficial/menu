@@ -29,36 +29,11 @@ export async function GET(
 
     return NextResponse.json(serializedItem)
   } catch (error) {
-    console.error('Database not available, using fallback data:', error)
-    
-    // Fallback to static data
-    const { dineInMenuItems, dineInCategories } = await import('@/data/menu-dine-in')
-    const { takeawayMenuItems, takeawayCategories } = await import('@/data/menu-takeaway')
-    
-    const allItems = [...dineInMenuItems, ...takeawayMenuItems]
-    const allCategories = [...dineInCategories, ...takeawayCategories]
-    
-    const menuItem = allItems.find(item => item.id === params.id)
-    
-    if (!menuItem) {
-      return NextResponse.json(
-        { error: 'Menu item not found' },
-        { status: 404 }
-      )
-    }
-
-    const formattedItem = {
-      ...menuItem,
-      categoryId: menuItem.category,
-      category: {
-        id: menuItem.category,
-        name: allCategories.find(cat => cat.id === menuItem.category)?.name || menuItem.category,
-        description: '',
-        icon: ''
-      }
-    }
-
-    return NextResponse.json(formattedItem)
+    console.error('Error fetching menu item:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch menu item' },
+      { status: 500 }
+    )
   }
 }
 
@@ -81,15 +56,13 @@ export async function PUT(
       packagingOption,
     } = body
 
-    // Check if price is already in cents (large number) or in rupiah (smaller number)
-    const priceInCents = price > 1000000 ? price : Math.round(price * 100)
-    
+    // Price is already in Rupiah, no conversion needed
     const menuItem = await prisma.menuItem.update({
       where: { id: params.id },
       data: {
         name,
         description,
-        price: priceInCents, // Price in cents
+        price: price, // Price in Rupiah
         image,
         categoryId,
         isAvailable,
@@ -112,8 +85,8 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating menu item:', error)
     return NextResponse.json(
-      { error: 'Database not available for updating menu items' },
-      { status: 503 }
+      { error: 'Failed to update menu item' },
+      { status: 500 }
     )
   }
 }
@@ -133,8 +106,8 @@ export async function DELETE(
   } catch (error) {
     console.error('Error deleting menu item:', error)
     return NextResponse.json(
-      { error: 'Database not available for deleting menu items' },
-      { status: 503 }
+      { error: 'Failed to delete menu item' },
+      { status: 500 }
     )
   }
 }

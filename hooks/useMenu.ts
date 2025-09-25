@@ -1,17 +1,11 @@
 import { useState, useEffect } from 'react'
+import { MenuItem as CartMenuItem } from '@/context/CartContext'
 import { dineInMenuItems, dineInCategories } from '@/data/menu-dine-in'
 import { takeawayMenuItems, takeawayCategories } from '@/data/menu-takeaway'
 
-export interface MenuItem {
-  id: string
-  name: string
-  description: string
-  price: number
-  image?: string
+export interface MenuItem extends Omit<CartMenuItem, 'image'> {
+  image: string // Override to make required
   categoryId: string
-  isAvailable: boolean
-  dineInAvailable: boolean
-  takeawayAvailable: boolean
   packagingOption: boolean
   category: {
     id: string
@@ -69,6 +63,7 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         const formattedMenuItems = currentMenuItems.map(item => ({
           ...item,
           categoryId: item.category,
+          packagingOption: item.packagingOption || false,
           category: {
             id: item.category,
             name: currentCategories.find(cat => cat.id === item.category)?.name || item.category,
@@ -134,6 +129,7 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
           const formattedMenuItems = currentMenuItems.map(item => ({
             ...item,
             categoryId: item.category,
+            packagingOption: item.packagingOption || false,
             category: {
               id: item.category,
               name: currentCategories.find(cat => cat.id === item.category)?.name || item.category,
