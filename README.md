@@ -1,6 +1,6 @@
 # Nogura Ramen Bar - Menu Ordering System
 
-A modern, responsive menu ordering system for Nogura Ramen Bar with database integration and admin panel.
+A modern, responsive menu ordering system for Nogura Ramen Bar with database integration and admin panel. Ready for Netlify deployment.
 
 ## 🚀 Features
 
@@ -11,6 +11,7 @@ A modern, responsive menu ordering system for Nogura Ramen Bar with database int
 - **🛒 Shopping Cart** - Add items with quantity and packaging options
 - **📱 WhatsApp Integration** - Send orders via WhatsApp
 - **🎨 Modern UI** - Clean, minimalist design
+- **☁️ Netlify Ready** - Optimized for Netlify deployment
 
 ## 🛠️ Tech Stack
 
@@ -18,14 +19,15 @@ A modern, responsive menu ordering system for Nogura Ramen Bar with database int
 - **Styling**: Tailwind CSS
 - **Database**: PostgreSQL with Prisma ORM
 - **Icons**: Lucide React
-- **Deployment**: Vercel
+- **Deployment**: Netlify with Functions
+- **API**: Netlify Functions (Serverless)
 
 ## 📦 Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd menu.nogura.id
+   git clone https://github.com/noguraofficial/menu.git
+   cd menu
    ```
 
 2. **Install dependencies**
@@ -45,51 +47,42 @@ A modern, responsive menu ordering system for Nogura Ramen Bar with database int
    NEXTAUTH_URL="http://localhost:3000"
    ```
 
-4. **Setup database (optional)**
-   ```bash
-   # Generate Prisma client
-   npm run db:generate
-   
-   # Push schema to database
-   npm run db:push
-   
-   # Seed with initial data
-   npm run db:seed
-   ```
-
-5. **Start development server**
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-## 🗄️ Database Setup
+## 🚀 Netlify Deployment
 
-### Option 1: With Database (Production-like)
+### Quick Deploy
 
-1. **Install PostgreSQL**
-   - Download from [postgresql.org](https://www.postgresql.org/download/)
-   - Or use Docker: `docker run --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres`
+1. **Connect to Netlify**
+   - Go to [netlify.com](https://netlify.com)
+   - Connect your GitHub repository
+   - Set build command: `npm run build`
+   - Set publish directory: `out`
 
-2. **Create database**
-   ```sql
-   CREATE DATABASE nogura_ramen;
+2. **Environment Variables**
+   Add these in Netlify dashboard:
+   ```
+   DATABASE_URL=postgresql://username:password@host:port/database?schema=public
+   NEXTAUTH_SECRET=your-secret-key-here
+   NEXTAUTH_URL=https://your-site-name.netlify.app
    ```
 
-3. **Update environment variables**
-   ```env
-   DATABASE_URL="postgresql://username:password@localhost:5432/nogura_ramen?schema=public"
-   ```
+3. **Database Setup**
+   - Use Supabase, PlanetScale, or Railway for PostgreSQL
+   - Run migrations: `npx prisma db push`
 
-4. **Initialize database**
-   ```bash
-   npm run db:generate
-   npm run db:push
-   npm run db:seed
-   ```
+### Manual Deploy
 
-### Option 2: Without Database (Fallback Mode)
+```bash
+# Build the project
+npm run build
 
-The application will automatically fallback to static data if the database is not available. No additional setup required.
+# Deploy to Netlify
+npx netlify deploy --prod --dir=out
+```
 
 ## 📱 Usage
 
@@ -131,26 +124,6 @@ The application will automatically fallback to static data if the database is no
 - **Packaging Options** - Restaurant packaging vs bring your own
 - **Order Status** - Complete order lifecycle tracking
 
-## 🚀 Deployment
-
-### Vercel Deployment
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin main
-   ```
-
-2. **Deploy to Vercel**
-   - Connect your GitHub repository to Vercel
-   - Add environment variables in Vercel dashboard
-   - Deploy automatically
-
-3. **Setup Production Database**
-   - Use a production PostgreSQL database (e.g., Supabase, PlanetScale)
-   - Update `DATABASE_URL` in Vercel environment variables
-
 ## 📝 Available Scripts
 
 - `npm run dev` - Start development server
@@ -161,6 +134,7 @@ The application will automatically fallback to static data if the database is no
 - `npm run db:push` - Push schema to database
 - `npm run db:seed` - Seed database with initial data
 - `npm run db:studio` - Open Prisma Studio
+- `./deploy-netlify.sh` - Deploy to Netlify script
 
 ## 🔧 Configuration
 
@@ -170,11 +144,12 @@ The application will automatically fallback to static data if the database is no
 - `NEXTAUTH_SECRET` - Secret key for NextAuth
 - `NEXTAUTH_URL` - Application URL
 
-### Customization
+### Netlify Functions
 
-- **Menu Items** - Edit `data/menu-dine-in.ts` and `data/menu-takeaway.ts`
-- **Styling** - Modify Tailwind classes in components
-- **WhatsApp Number** - Update in checkout page
+- `/.netlify/functions/menu` - Menu API
+- `/.netlify/functions/orders` - Orders API
+- `/.netlify/functions/categories` - Categories API
+- `/.netlify/functions/upload` - Upload API
 
 ## 📱 Mobile Optimization
 
@@ -213,7 +188,7 @@ The application will automatically fallback to static data if the database is no
 - **Code Splitting** - Automatic code splitting by Next.js
 - **Image Optimization** - Next.js automatic image optimization
 - **Caching** - Database query caching with Prisma
-- **CDN** - Vercel's global CDN for fast delivery
+- **CDN** - Netlify's global CDN for fast delivery
 
 ## 🤝 Contributing
 
