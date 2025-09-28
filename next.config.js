@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Only use export for production builds
-  ...(process.env.NODE_ENV === 'production' && {
-    output: 'export',
-    trailingSlash: true,
-  }),
+  // Vercel deployment configuration
   images: {
-    unoptimized: true
+    domains: ['localhost'],
+    unoptimized: false
+  },
+  // Enable API routes for Vercel
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client']
   }
 }
 

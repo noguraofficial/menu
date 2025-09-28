@@ -86,7 +86,7 @@ export default function MenuManagement() {
     description: '',
     price: 0,
     image: '',
-    category: 'ramen',
+    categoryId: 'ramen',
     isAvailable: true,
     dineInAvailable: true,
     takeawayAvailable: false
@@ -111,7 +111,7 @@ export default function MenuManagement() {
       description: '',
       price: 0,
       image: '',
-      category: 'ramen',
+      categoryId: 'ramen',
       isAvailable: true,
       dineInAvailable: activeTab === 'dine-in',
       takeawayAvailable: activeTab === 'takeaway'
@@ -127,7 +127,7 @@ export default function MenuManagement() {
       description: item.description || '',
       price: item.price || 0,
       image: item.image || '',
-      category: item.category.id,
+      categoryId: item.category.id,
       isAvailable: item.isAvailable !== undefined ? item.isAvailable : true,
       dineInAvailable: item.dineInAvailable !== undefined ? item.dineInAvailable : true,
       takeawayAvailable: item.takeawayAvailable !== undefined ? item.takeawayAvailable : false
@@ -522,10 +522,10 @@ export default function MenuManagement() {
                         Category
                       </label>
                       <select
-                        value={formData.category || 'ramen'}
+                        value={formData.categoryId || 'ramen'}
                         onChange={(e) => {
                           console.log('Category changed:', e.target.value) // Debug log
-                          setFormData({ ...formData, category: e.target.value })
+                          setFormData({ ...formData, categoryId: e.target.value })
                         }}
                         className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-black focus:border-black transition-colors text-gray-900"
                       >
