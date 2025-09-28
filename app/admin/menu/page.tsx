@@ -3,7 +3,28 @@
 import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, Eye, EyeOff, RefreshCw } from 'lucide-react'
 import { formatCurrency } from '@/utils/format'
-import { MenuItem } from '@/context/CartContext'
+// Define the correct MenuItem interface for admin
+interface MenuItem {
+  id: string
+  name: string
+  description: string
+  price: number
+  image: string | null
+  categoryId: string
+  isAvailable: boolean
+  dineInAvailable?: boolean
+  takeawayAvailable?: boolean
+  packagingOption?: boolean
+  priority?: number
+  category: {
+    id: string
+    name: string
+    description?: string
+    icon?: string
+    isActive: boolean
+    priority: number
+  }
+}
 import ImageUpload from '@/components/ImageUpload'
 
 export default function MenuManagement() {
@@ -18,24 +39,38 @@ export default function MenuManagement() {
     try {
       setLoading(true)
       setError(null)
+      console.log('Fetching menus...')
 
       // Fetch dine-in menus
-      const dineInResponse = await fetch('/.netlify/functions/menu?orderType=dine-in')
+      const dineInResponse = await fetch('/api/admin/menu?orderType=dine-in')
+      console.log('Dine-in response status:', dineInResponse.status)
       if (dineInResponse.ok) {
         const dineInData = await dineInResponse.json()
+        console.log('Dine-in data received:', dineInData.length, 'items')
         setDineInMenus(dineInData)
+      } else {
+        console.error('Dine-in response not ok:', dineInResponse.status)
+        const errorText = await dineInResponse.text()
+        console.error('Dine-in error response:', errorText)
       }
 
       // Fetch takeaway menus
-      const takeawayResponse = await fetch('/.netlify/functions/menu?orderType=takeaway')
+      const takeawayResponse = await fetch('/api/admin/menu?orderType=takeaway')
+      console.log('Takeaway response status:', takeawayResponse.status)
       if (takeawayResponse.ok) {
         const takeawayData = await takeawayResponse.json()
+        console.log('Takeaway data received:', takeawayData.length, 'items')
         setTakeawayMenus(takeawayData)
+      } else {
+        console.error('Takeaway response not ok:', takeawayResponse.status)
+        const errorText = await takeawayResponse.text()
+        console.error('Takeaway error response:', errorText)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch menus')
       console.error('Error fetching menus:', err)
+      setError(err instanceof Error ? err.message : 'Failed to fetch menus')
     } finally {
+      console.log('Setting loading to false')
       setLoading(false)
     }
   }
@@ -92,7 +127,7 @@ export default function MenuManagement() {
       description: item.description || '',
       price: item.price || 0,
       image: item.image || '',
-      category: typeof item.category === 'object' ? (item.category as any).id : item.category,
+      category: item.category.id,
       isAvailable: item.isAvailable !== undefined ? item.isAvailable : true,
       dineInAvailable: item.dineInAvailable !== undefined ? item.dineInAvailable : true,
       takeawayAvailable: item.takeawayAvailable !== undefined ? item.takeawayAvailable : false
@@ -209,7 +244,7 @@ export default function MenuManagement() {
         body: JSON.stringify({
           ...item,
           isAvailable: !item.isAvailable,
-          categoryId: typeof item.category === 'object' ? (item.category as any).id : item.category
+          categoryId: item.category.id
         })
       })
 
@@ -363,7 +398,7 @@ export default function MenuManagement() {
                           {formatCurrency(menu.price)}
                         </span>
                         <span className="text-sm text-gray-500 capitalize">
-                          {typeof menu.category === 'object' ? (menu.category as any).name : menu.category}
+                          {menu.category.name}
                         </span>
                       </div>
                     </div>

@@ -39,14 +39,10 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         setLoading(true)
         setError(null)
 
-        // Check if we're in development mode and use local API server
-        const isDevelopment = process.env.NODE_ENV === 'development'
-        const baseUrl = isDevelopment ? 'http://localhost:3001' : ''
-        
-        // Fetch from database using local API server in development or Netlify Functions in production
+        // Fetch from Next.js API routes
         const [categoriesResponse, menuResponse] = await Promise.all([
-          fetch(`${baseUrl}/api/categories`),
-          fetch(`${baseUrl}/api/menu?orderType=${orderType}`)
+          fetch('/api/categories'),
+          fetch(`/api/menu?orderType=${orderType}`)
         ])
 
         if (categoriesResponse.ok && menuResponse.ok) {
@@ -81,14 +77,10 @@ export function useMenu(orderType: 'dine-in' | 'takeaway' = 'dine-in') {
         try {
           setError(null)
 
-          // Check if we're in development mode and use local API server
-          const isDevelopment = process.env.NODE_ENV === 'development'
-          const baseUrl = isDevelopment ? 'http://localhost:3001' : ''
-          
-          // Fetch from database using local API server in development or Netlify Functions in production
+          // Fetch from Next.js API routes
           const [categoriesResponse, menuResponse] = await Promise.all([
-            fetch(`${baseUrl}/api/categories`),
-            fetch(`${baseUrl}/api/menu?orderType=${orderType}`)
+            fetch('/api/categories'),
+            fetch(`/api/menu?orderType=${orderType}`)
           ])
 
           if (categoriesResponse.ok && menuResponse.ok) {

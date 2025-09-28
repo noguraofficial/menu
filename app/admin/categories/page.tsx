@@ -24,7 +24,7 @@ export default function CategoryManagement() {
       setLoading(true)
       setError(null)
 
-      const response = await fetch('/.netlify/functions/categories')
+      const response = await fetch('/api/categories')
       if (response.ok) {
         const data = await response.json()
         setCategories(data)
@@ -76,7 +76,7 @@ export default function CategoryManagement() {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this category?')) {
       try {
-        const response = await fetch(`/.netlify/functions/categories?id=${id}`, {
+        const response = await fetch(`/api/categories/${id}`, {
           method: 'DELETE'
         })
         
@@ -96,7 +96,7 @@ export default function CategoryManagement() {
     try {
       if (editingCategory) {
         // Update existing category
-        const response = await fetch(`/.netlify/functions/categories?id=${editingCategory.id}`, {
+        const response = await fetch(`/api/categories/${editingCategory.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ export default function CategoryManagement() {
         }
       } else {
         // Create new category
-        const response = await fetch('/.netlify/functions/categories', {
+        const response = await fetch('/api/categories', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ export default function CategoryManagement() {
   const toggleActive = async (category: Category) => {
     try {
       const updatedCategory = { ...category, isActive: !category.isActive }
-      const response = await fetch(`/.netlify/functions/categories?id=${category.id}`, {
+      const response = await fetch(`/api/categories/${category.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
